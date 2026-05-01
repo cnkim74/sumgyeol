@@ -40,9 +40,39 @@ async function init(): Promise<Client> {
         created_at TEXT NOT NULL DEFAULT (datetime('now')),
         FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
       )`,
+      `CREATE TABLE IF NOT EXISTS hero_slides (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        image_path TEXT NOT NULL,
+        alt TEXT,
+        sort_order INTEGER NOT NULL DEFAULT 0,
+        created_at TEXT NOT NULL DEFAULT (datetime('now'))
+      )`,
     ],
     "write"
   );
+
+  // 기본 슬라이드 시드 — 비어 있을 때만
+  const existing = await client.execute("SELECT COUNT(*) as n FROM hero_slides");
+  const count = Number((existing.rows[0] as Record<string, unknown>).n);
+  if (count === 0) {
+    await client.batch(
+      [
+        {
+          sql: "INSERT INTO hero_slides (image_path, alt, sort_order) VALUES (?, ?, ?)",
+          args: ["/hero/1.jpg", "고요한 풍경 1", 0],
+        },
+        {
+          sql: "INSERT INTO hero_slides (image_path, alt, sort_order) VALUES (?, ?, ?)",
+          args: ["/hero/2.jpg", "고요한 풍경 2", 1],
+        },
+        {
+          sql: "INSERT INTO hero_slides (image_path, alt, sort_order) VALUES (?, ?, ?)",
+          args: ["/hero/3.jpg", "고요한 풍경 3", 2],
+        },
+      ],
+      "write"
+    );
+  }
 
   return client;
 }

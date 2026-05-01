@@ -8,11 +8,18 @@ import Subscription from "@/components/Subscription";
 import Trust from "@/components/Trust";
 import B2BLine from "@/components/B2BLine";
 import WaitlistSection from "@/components/WaitlistSection";
+import { listSlides } from "@/lib/slides";
 
-export default function HomePage() {
+export default async function HomePage() {
+  const slides = await listSlides();
+  const items = slides.map((s) => ({
+    id: s.id,
+    imagePath: s.imagePath,
+    alt: s.alt ?? "",
+  }));
   return (
     <>
-      <HeroSlider />
+      <HeroSlider slides={items} />
       <VideoPreview />
       <Promise />
       <ThreeActs />
