@@ -51,7 +51,7 @@ export default function ThreeActs() {
 
         <div className="grid gap-6 md:grid-cols-3">
           {acts.map((act) => (
-            <article key={act.id} id={act.id} className="card scroll-mt-24">
+            <article key={act.id} id={act.id} className="card lift scroll-mt-24">
               <div className="flex items-baseline justify-between">
                 <span className="kicker">{act.kicker}</span>
                 <span className="text-[13px] text-[var(--color-ink-mute)] font-sans">

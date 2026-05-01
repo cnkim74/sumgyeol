@@ -2,7 +2,10 @@ import WaitlistForm from "./WaitlistForm";
 
 export default function WaitlistSection() {
   return (
-    <section id="사전신청" className="section dawn-glow scroll-mt-20">
+    <section
+      id="사전신청"
+      className="section bg-[var(--color-bg-soft)] border-y border-[var(--color-rule)] scroll-mt-20"
+    >
       <div className="container max-w-3xl">
         <p className="kicker mb-4 text-center">사전 신청</p>
         <h2 className="display-md text-center">

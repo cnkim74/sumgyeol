@@ -76,9 +76,42 @@ Vercel 같은 서버리스 환경에서는 파일 시스템이 영속되지 않�
 **Vercel KV / Postgres / Resend** 중 하나로 교체 필요. `lib/waitlist.ts`
 의 `appendWaitlistEntry` 만 갈아끼우면 됩니다.
 
+## 회원·인증
+
+- 세션: `iron-session` (쿠키 암호화) — `SESSION_PASSWORD` 필요 (32자 이상)
+- DB: `@libsql/client` — 로컬 SQLite (`data/sumgyeol.db`), 프로덕션 Turso 권장
+- 비밀번호: Node `crypto.scrypt` (의존성 0)
+- 회원 등급: `member` 일반회원 / `funeral` 장례식장 / `park` 하늘공원 / `admin` 관리자
+
+가입 폼은 앞 3개 등급만 노출. **관리자 승격은 SQL 로 수동**:
+
+```sql
+UPDATE users SET role = 'admin' WHERE email = 'you@example.com';
+```
+
+페이지·라우트 가드:
+
+| 경로 | 누가 |
+|---|---|
+| `/signup`, `/login` | 누구나 |
+| `/dashboard` | 로그인한 모든 회원 |
+| `/promo` (홍보 배너 신청) | `funeral`, `park` 만 |
+| `/admin` | `admin` 만 |
+
+## 환경 변수
+
+`.env.example` 복사해서 `.env.local` 만들고 채워 주세요.
+
+```bash
+cp .env.example .env.local
+# 그 다음 SESSION_PASSWORD 발급:
+openssl rand -hex 32
+```
+
+Vercel 배포 시 동일 변수를 *Project Settings → Environment Variables* 에 등록.
+
 ## 다음 단계 (Phase 2 이후)
 
-- 회원가입·로그인
 - 모음 — 사진·일지 업로드, AI 영상 생성
 - 보냄 — 부고 명단·자동 SMS
 - 머무름 — 추모 페이지, 기일 알림

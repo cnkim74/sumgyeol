@@ -4,7 +4,7 @@ out/
 .DS_Store
 ._*
 .env*.local
-data/waitlist.jsonl
+data/
 *.log
 tsconfig.tsbuildinfo
 next-env.d.ts

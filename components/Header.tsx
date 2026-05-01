@@ -1,23 +1,20 @@
-import Link from "next/link";
+import { getSession } from "@/lib/session";
+import { ROLE_LABELS, PROMO_ELIGIBLE_ROLES, type Role } from "@/lib/roles";
+import HeaderClient, { type HeaderUser } from "./HeaderClient";
 
-export default function Header() {
-  return (
-    <header className="site-header">
-      <div className="container flex items-center justify-between h-[68px]">
-        <Link href="/" className="brand" aria-label="숨결 — 처음으로">
-          숨결
-        </Link>
-        <nav className="hidden md:flex items-center gap-1">
-          <Link href="/#모음" className="nav-link">모음</Link>
-          <Link href="/#보냄" className="nav-link">보냄</Link>
-          <Link href="/#머무름" className="nav-link">머무름</Link>
-          <Link href="/about" className="nav-link">소개</Link>
-          <Link href="/help" className="nav-link">도움말</Link>
-        </nav>
-        <Link href="/#사전신청" className="btn btn-primary !py-3 !px-5 !text-sm">
-          사전 신청
-        </Link>
-      </div>
-    </header>
-  );
+export default async function Header() {
+  const session = await getSession();
+  const user: HeaderUser | null =
+    session.userId && session.role
+      ? {
+          id: session.userId,
+          name: session.name ?? "",
+          email: session.email ?? "",
+          role: session.role,
+          roleLabel: ROLE_LABELS[session.role as Role],
+          canPromo: PROMO_ELIGIBLE_ROLES.includes(session.role as Role),
+          isAdmin: session.role === "admin",
+        }
+      : null;
+  return <HeaderClient user={user} />;
 }

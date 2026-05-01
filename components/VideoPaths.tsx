@@ -14,7 +14,7 @@ export default function VideoPaths() {
 
         <div className="grid gap-6 lg:grid-cols-2">
           {/* AI 자동 영상 */}
-          <article className="card !gap-5">
+          <article className="card lift !gap-5">
             <div className="media-frame video !aspect-[16/10]">
               <span className="media-label">AI 추모 영상 · 미리보기</span>
             </div>
@@ -32,7 +32,7 @@ export default function VideoPaths() {
           </article>
 
           {/* 다큐멘터리 인터뷰 */}
-          <article className="card !gap-5">
+          <article className="card lift !gap-5">
             <div className="media-frame !aspect-[16/10]">
               <span className="media-label">다큐멘터리 · 인터뷰</span>
             </div>
