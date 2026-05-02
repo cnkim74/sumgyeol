@@ -1904,3 +1904,581 @@ body {
   gap: 10px;
   padding-top: 4px;
 }
+
+/* ═══════════════════════════════════════════════════════════
+   부고장 공개 페이지
+   ═══════════════════════════════════════════════════════════ */
+
+/* 부고 페이지는 헤더/푸터 없이 독립적인 느낌 — 하지만 전역 레이아웃 안에서 */
+.obit-root {
+  max-width: 540px;
+  margin: 0 auto;
+  padding: 0 0 80px;
+  background: var(--color-paper);
+  min-height: calc(100dvh - 48px);
+}
+
+/* 상단 헤더 — 국화 + 부고 타이틀 */
+.obit-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 48px 24px 24px;
+  gap: 16px;
+  border-bottom: 1px solid var(--color-rule);
+}
+
+.obit-chrysanthemum {
+  width: 60px;
+  height: 60px;
+  color: var(--color-ink-mute);
+  opacity: 0.6;
+}
+
+.obit-chrysanthemum svg { width: 100%; height: 100%; }
+
+.obit-kicker {
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.5em;
+  color: var(--color-ink-mute);
+  text-transform: uppercase;
+}
+
+/* 고인 정보 */
+.obit-deceased {
+  padding: 36px 28px 28px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  text-align: center;
+}
+
+.obit-portrait {
+  width: 96px;
+  height: 96px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--color-rule);
+  filter: grayscale(30%);
+}
+
+.obit-name-block { display: flex; flex-direction: column; gap: 6px; }
+
+.obit-title-text {
+  font-size: 15px;
+  color: var(--color-ink-soft);
+  line-height: 1.6;
+  word-break: keep-all;
+}
+
+.obit-name {
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--color-ink);
+}
+
+.obit-died-line {
+  font-size: 17px;
+  font-weight: 500;
+  color: var(--color-ink);
+  letter-spacing: -0.01em;
+}
+
+.obit-years {
+  font-size: 13px;
+  color: var(--color-ink-mute);
+  letter-spacing: 0.1em;
+  margin-top: 4px;
+}
+
+/* 구분선 */
+.obit-divider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 28px;
+  margin: 8px 0;
+}
+
+.obit-divider span {
+  flex: 1;
+  height: 1px;
+  background: var(--color-rule);
+}
+
+.obit-divider--light span { background: var(--color-bg-soft); }
+
+.obit-divider-icon {
+  width: 18px;
+  height: 18px;
+  color: var(--color-ink-mute);
+  flex-shrink: 0;
+}
+
+/* 섹션 */
+.obit-section {
+  padding: 24px 28px;
+}
+
+.obit-section--message {
+  text-align: center;
+}
+
+.obit-section--memorial {
+  padding: 16px 28px;
+}
+
+.obit-section-title {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--color-ink-mute);
+  margin-bottom: 14px;
+}
+
+/* 정보 그리드 (dt/dd) */
+.obit-info-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  border: 1px solid var(--color-rule);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.obit-info-row {
+  display: grid;
+  grid-template-columns: 72px 1fr;
+  gap: 0;
+  border-bottom: 1px solid var(--color-rule);
+}
+
+.obit-info-row:last-child { border-bottom: none; }
+
+.obit-info-row dt {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--color-ink-mute);
+  padding: 11px 14px;
+  background: var(--color-bg);
+  display: flex;
+  align-items: center;
+}
+
+.obit-info-row dd {
+  font-size: 14px;
+  color: var(--color-ink);
+  padding: 11px 14px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  word-break: keep-all;
+  line-height: 1.5;
+}
+
+.obit-info-row--accent dt { background: var(--color-bg-soft); }
+.obit-info-row--accent dd {
+  font-weight: 600;
+  color: var(--color-ink);
+}
+
+/* 지도 링크 */
+.obit-map-link {
+  color: inherit;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.obit-map-link:hover { text-decoration: underline; }
+
+.obit-map-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 1px 7px;
+  background: var(--color-bg-soft);
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--color-ink-mute);
+}
+
+/* 상주 */
+.obit-mourners {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.obit-mourner {
+  display: flex;
+  align-items: baseline;
+  gap: 5px;
+  background: var(--color-bg);
+  border: 1px solid var(--color-rule);
+  border-radius: 8px;
+  padding: 8px 14px;
+}
+
+.obit-mourner-relation {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--color-ink-mute);
+  letter-spacing: 0.02em;
+}
+
+.obit-mourner-name {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--color-ink);
+}
+
+/* 연락처 */
+.obit-contact {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.obit-contact-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-ink);
+}
+
+.obit-contact-phone {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--color-ink);
+  letter-spacing: 0.02em;
+  text-decoration: none;
+  border-bottom: 1px solid var(--color-rule);
+  transition: border-color 0.15s ease;
+}
+
+.obit-contact-phone:hover { border-bottom-color: var(--color-ink); }
+
+/* 부의금 */
+.obit-bank {
+  background: var(--color-bg);
+  border: 1px solid var(--color-rule);
+  border-radius: 10px;
+  padding: 14px 18px;
+}
+
+.obit-bank-info {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 14px;
+  font-size: 14px;
+}
+
+.obit-bank-name {
+  font-size: 12px;
+  font-weight: 600;
+  background: var(--color-bg-soft);
+  padding: 2px 8px;
+  border-radius: 4px;
+  color: var(--color-ink-mute);
+}
+
+.obit-bank-account {
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--color-ink);
+  font-variant-numeric: tabular-nums;
+}
+
+.obit-bank-holder {
+  font-size: 13px;
+  color: var(--color-ink-mute);
+}
+
+/* 추가 메시지 */
+.obit-extra-message {
+  font-size: 14px;
+  line-height: 1.8;
+  color: var(--color-ink-soft);
+  white-space: pre-wrap;
+  word-break: keep-all;
+}
+
+/* 하늘공원 링크 배너 */
+.obit-memorial-link {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: linear-gradient(135deg, var(--color-bg-soft) 0%, var(--color-bg) 100%);
+  border: 1px solid var(--color-rule);
+  border-radius: 12px;
+  padding: 16px 18px;
+  text-decoration: none;
+  transition: box-shadow 0.15s ease, border-color 0.15s ease;
+}
+
+.obit-memorial-link:hover {
+  box-shadow: 0 4px 12px -4px rgba(10,10,10,0.12);
+  border-color: var(--color-bg-deep);
+}
+
+.obit-memorial-icon { font-size: 24px; flex-shrink: 0; }
+
+.obit-memorial-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-ink);
+  margin-bottom: 2px;
+}
+
+.obit-memorial-desc {
+  font-size: 12px;
+  color: var(--color-ink-mute);
+  word-break: keep-all;
+}
+
+.obit-memorial-arrow {
+  font-size: 16px;
+  color: var(--color-ink-mute);
+  margin-left: auto;
+  flex-shrink: 0;
+}
+
+/* 공유 패널 */
+.obit-share-wrap { padding: 8px 28px; }
+
+.obit-share {
+  background: var(--color-bg);
+  border-radius: 14px;
+  padding: 20px;
+  text-align: center;
+}
+
+.obit-share-label {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-ink-mute);
+  margin-bottom: 14px;
+}
+
+.obit-share-btns {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.obit-share-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 10px 18px;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: transform 0.1s ease, box-shadow 0.1s ease;
+}
+
+.obit-share-btn:hover { transform: translateY(-1px); }
+
+.obit-share-kakao {
+  background: #FEE500;
+  color: #3A1D1D;
+}
+
+.obit-share-sms {
+  background: var(--color-ink);
+  color: var(--color-paper);
+}
+
+.obit-share-copy {
+  background: var(--color-paper);
+  color: var(--color-ink);
+  border: 1px solid var(--color-rule) !important;
+}
+
+.obit-share-copy.copied {
+  background: #d1fae5;
+  color: #065f46;
+  border-color: #a7f3d0 !important;
+}
+
+/* 하단 푸터 */
+.obit-footer {
+  padding: 32px 28px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.obit-footer p:first-child {
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--color-ink-mute);
+  letter-spacing: 0.06em;
+}
+
+.obit-footer-brand {
+  font-size: 12px;
+  color: var(--color-bg-deep);
+  letter-spacing: 0.04em;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   부고장 편집기 (ObituaryEditor)
+   ═══════════════════════════════════════════════════════════ */
+
+.obit-editor-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.oe-fieldset {
+  border: none;
+  padding: 0;
+  margin: 0 0 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.oe-legend {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-ink);
+  padding: 0 0 10px;
+  border-bottom: 2px solid var(--color-ink);
+  width: 100%;
+  margin-bottom: 6px;
+}
+
+.oe-row {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.oe-field {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  flex: 1;
+  min-width: 120px;
+}
+
+.oe-field--2x { flex: 2; }
+
+.oe-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--color-ink);
+}
+
+.oe-label-hint {
+  font-size: 11px;
+  font-weight: 400;
+  color: var(--color-ink-mute);
+}
+
+.oe-input,
+.oe-textarea,
+.oe-select {
+  background: var(--color-paper);
+  border: 1px solid var(--color-rule);
+  border-radius: 8px;
+  padding: 9px 12px;
+  font-family: var(--font-sans);
+  font-size: 14px;
+  color: var(--color-ink);
+  outline: none;
+  transition: border-color 0.15s ease;
+  width: 100%;
+}
+
+.oe-input:focus,
+.oe-textarea:focus,
+.oe-select:focus { border-color: var(--color-ink-mute); }
+
+.oe-textarea { resize: vertical; line-height: 1.6; }
+
+.oe-mono { font-variant-numeric: tabular-nums; letter-spacing: 0.02em; }
+
+/* 상주 편집 */
+.oe-mourners { display: flex; flex-direction: column; gap: 8px; }
+
+.oe-mourner-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.oe-remove-btn {
+  background: none;
+  border: none;
+  color: var(--color-ink-mute);
+  font-size: 14px;
+  cursor: pointer;
+  padding: 4px 6px;
+  border-radius: 4px;
+  flex-shrink: 0;
+  transition: color 0.1s ease;
+}
+
+.oe-remove-btn:hover { color: #b91c1c; }
+
+.oe-add-btn {
+  background: var(--color-bg);
+  border: 1px dashed var(--color-rule);
+  border-radius: 8px;
+  padding: 8px 14px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--color-ink-mute);
+  cursor: pointer;
+  align-self: flex-start;
+  transition: border-color 0.15s ease, color 0.15s ease;
+}
+
+.oe-add-btn:hover { border-color: var(--color-ink-mute); color: var(--color-ink); }
+
+/* 공개 라디오 */
+.oe-radio-group { display: flex; flex-direction: column; gap: 12px; }
+
+.oe-radio {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 14px;
+  color: var(--color-ink-soft);
+  cursor: pointer;
+  line-height: 1.5;
+}
+
+.oe-error { font-size: 13px; color: #b91c1c; }
+
+.oe-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  padding-top: 8px;
+}

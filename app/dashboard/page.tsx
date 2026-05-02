@@ -2,9 +2,10 @@ import { redirect } from "next/navigation";
 import Link from "next/link";
 import { getSession } from "@/lib/session";
 import { getMemorialsByUser } from "@/lib/memorials";
+import { getObituariesByUser } from "@/lib/obituaries";
 import { PROMO_ELIGIBLE_ROLES, type Role } from "@/lib/roles";
 
-export const metadata = { title: "나의 하늘공원" };
+export const metadata = { title: "대시보드 — 숨결" };
 
 export default async function DashboardPage() {
   const session = await getSession();
@@ -12,7 +13,10 @@ export default async function DashboardPage() {
     redirect("/login?next=/dashboard");
   }
   const role: Role = session.role;
-  const memorials = await getMemorialsByUser(session.userId!);
+  const [memorials, obituaries] = await Promise.all([
+    getMemorialsByUser(session.userId!),
+    getObituariesByUser(session.userId!),
+  ]);
 
   return (
     <div className="min-h-[calc(100dvh-48px)] bg-[#f7f7f5]">
@@ -94,6 +98,60 @@ export default async function DashboardPage() {
               ))}
               <Link href="/dashboard/memorial/new" className="btn btn-soft text-[14px] py-2.5 px-5 self-start mt-1">
                 + 새 하늘공원
+              </Link>
+            </div>
+          )}
+        </div>
+
+        {/* 부고장 */}
+        <div className="mb-6 mt-10">
+          <h2 className="text-[11px] font-semibold uppercase tracking-widest text-[var(--color-ink-mute)] mb-3">
+            부고장
+          </h2>
+          {obituaries.length === 0 ? (
+            <div className="dash-card" style={{ gap: 20 }}>
+              <span className="dash-card-icon">📨</span>
+              <div className="flex-1">
+                <p className="dash-card-title">부고장 만들기</p>
+                <p className="dash-card-desc">
+                  고인 정보·장례 일정·상주·계좌를 입력하면 공유 링크가 생성돼요.
+                  카카오톡·문자로 바로 전달할 수 있습니다.
+                </p>
+              </div>
+              <Link href="/dashboard/obituary/new" className="btn btn-primary text-[14px] py-2.5 px-5 shrink-0">
+                만들기
+              </Link>
+            </div>
+          ) : (
+            <div className="flex flex-col gap-3">
+              {obituaries.map((o) => (
+                <div key={o.id} className="dashboard-memorial-row">
+                  <div className="dmr-avatar" style={{ background: "var(--color-bg-deep)", fontSize: 18 }}>
+                    📨
+                  </div>
+                  <div className="dmr-info">
+                    <p className="dmr-name">고(故) {o.deceasedName} 님</p>
+                    <p className="dmr-meta">
+                      {o.diedDate.slice(0, 10)} 별세 · {o.funeralHome}
+                    </p>
+                  </div>
+                  <div className="dmr-actions">
+                    <span className={`notion-badge notion-badge-${o.status === "live" ? "approved" : "pending"}`}>
+                      {o.status === "live" ? "공개" : "초안"}
+                    </span>
+                    {o.status === "live" && (
+                      <Link href={`/부고/${o.slug}`} className="dmr-link" target="_blank">
+                        공유 →
+                      </Link>
+                    )}
+                    <Link href={`/dashboard/obituary/${o.id}`} className="dmr-link">
+                      편집
+                    </Link>
+                  </div>
+                </div>
+              ))}
+              <Link href="/dashboard/obituary/new" className="btn btn-soft text-[14px] py-2.5 px-5 self-start mt-1">
+                + 새 부고장
               </Link>
             </div>
           )}

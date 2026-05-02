@@ -24,9 +24,15 @@ const NAV: { section: string; items: NavItem[] }[] = [
     ],
   },
   {
+    section: "보냄 · 머무름",
+    items: [
+      { href: "/admin/obituaries", icon: "📨", label: "부고장" },
+      { href: "/admin/memorials", icon: "🏞", label: "하늘공원 페이지" },
+    ],
+  },
+  {
     section: "콘텐츠",
     items: [
-      { href: "/admin/memorials", icon: "🏞", label: "하늘공원 페이지" },
       { href: "/admin/slides", icon: "🖼", label: "홈 슬라이더" },
     ],
   },
