@@ -9,7 +9,11 @@ async function init(): Promise<Client> {
   let authToken = process.env.DATABASE_AUTH_TOKEN;
 
   if (!url) {
-    const dataDir = path.join(process.cwd(), "data");
+    // Vercel 서버리스는 /tmp 외 read-only → /tmp 사용 (인스턴스마다 휘발).
+    // 진짜 영속 필요하면 DATABASE_URL=libsql://...turso.io 로 Turso 붙이면 됨.
+    const dataDir = process.env.VERCEL
+      ? "/tmp"
+      : path.join(process.cwd(), "data");
     await fs.mkdir(dataDir, { recursive: true });
     url = `file:${path.join(dataDir, "sumgyeol.db")}`;
     authToken = undefined;
