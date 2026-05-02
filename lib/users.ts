@@ -32,6 +32,9 @@ export type User = {
   organization: string | null;
   phone: string | null;
   createdAt: string;
+  authProvider: string;
+  providerId: string | null;
+  avatarUrl: string | null;
 };
 
 export type UserInput = {
@@ -131,5 +134,85 @@ function rowToUser(row: Record<string, unknown>): User {
     organization: (row.organization as string | null) ?? null,
     phone: (row.phone as string | null) ?? null,
     createdAt: row.created_at as string,
+    authProvider: (row.auth_provider as string | null) ?? "local",
+    providerId: (row.provider_id as string | null) ?? null,
+    avatarUrl: (row.avatar_url as string | null) ?? null,
   };
+}
+
+export async function findOrCreateOAuthUser(opts: {
+  provider: "google" | "naver";
+  providerId: string;
+  email: string;
+  name: string;
+  avatarUrl?: string;
+}): Promise<User> {
+  const db = await getDb();
+  const email = opts.email.trim().toLowerCase();
+
+  // 1. Try find by provider_id + auth_provider
+  const byProvider = await db.execute({
+    sql: "SELECT * FROM users WHERE provider_id = ? AND auth_provider = ?",
+    args: [opts.providerId, opts.provider],
+  });
+  if (byProvider.rows.length > 0) {
+    // Update name and avatar
+    await db.execute({
+      sql: "UPDATE users SET name = ?, avatar_url = ? WHERE id = ?",
+      args: [opts.name, opts.avatarUrl ?? null, Number(byProvider.rows[0].id)],
+    });
+    const updated = await db.execute({
+      sql: "SELECT * FROM users WHERE id = ?",
+      args: [Number(byProvider.rows[0].id)],
+    });
+    const user = rowToUser(updated.rows[0] as Record<string, unknown>);
+    return promoteIfAdminEmail(user);
+  }
+
+  // 2. Try find by email (link existing local account)
+  const byEmail = await db.execute({
+    sql: "SELECT * FROM users WHERE email = ?",
+    args: [email],
+  });
+  if (byEmail.rows.length > 0) {
+    const existingId = Number(byEmail.rows[0].id);
+    await db.execute({
+      sql: "UPDATE users SET auth_provider = ?, provider_id = ?, avatar_url = ? WHERE id = ?",
+      args: [opts.provider, opts.providerId, opts.avatarUrl ?? null, existingId],
+    });
+    const updated = await db.execute({
+      sql: "SELECT * FROM users WHERE id = ?",
+      args: [existingId],
+    });
+    const user = rowToUser(updated.rows[0] as Record<string, unknown>);
+    return promoteIfAdminEmail(user);
+  }
+
+  // 3. Create new user
+  const result = await db.execute({
+    sql: `INSERT INTO users (email, name, password_hash, role, auth_provider, provider_id, avatar_url)
+          VALUES (?, ?, 'oauth', 'member', ?, ?, ?) RETURNING *`,
+    args: [email, opts.name, opts.provider, opts.providerId, opts.avatarUrl ?? null],
+  });
+  const newUser = rowToUser(result.rows[0] as Record<string, unknown>);
+  return promoteIfAdminEmail(newUser);
+}
+
+export async function updateUserProfile(
+  id: number,
+  opts: { name?: string; avatarUrl?: string; phone?: string }
+): Promise<User | null> {
+  const db = await getDb();
+  const fields: string[] = [];
+  const args: (string | number | null)[] = [];
+  if (opts.name !== undefined) { fields.push("name = ?"); args.push(opts.name); }
+  if (opts.avatarUrl !== undefined) { fields.push("avatar_url = ?"); args.push(opts.avatarUrl); }
+  if (opts.phone !== undefined) { fields.push("phone = ?"); args.push(opts.phone); }
+  if (fields.length === 0) return findUserById(id);
+  args.push(id);
+  await db.execute({
+    sql: `UPDATE users SET ${fields.join(", ")} WHERE id = ?`,
+    args,
+  });
+  return findUserById(id);
 }

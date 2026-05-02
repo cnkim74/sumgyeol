@@ -8,6 +8,7 @@ import {
   ORG_REQUIRED_ROLES,
   type Role,
 } from "@/lib/roles";
+import OAuthButtons from "./OAuthButtons";
 
 const ROLE_DESCRIPTIONS: Record<Role, string> = {
   member: "내 숨결을 모으고, 가족에게 남기는 분",
@@ -58,6 +59,8 @@ export default function SignupForm() {
   }
 
   return (
+    <div className="flex flex-col gap-5">
+      <OAuthButtons next="/dashboard" />
     <form onSubmit={onSubmit} className="card !p-8 !gap-5">
       <fieldset className="field">
         <legend className="text-[13px] font-semibold tracking-[0.02em] text-[var(--color-ink-soft)] mb-2">
@@ -147,5 +150,6 @@ export default function SignupForm() {
         {submitting ? "가입 중…" : "가입하기"}
       </button>
     </form>
+    </div>
   );
 }

@@ -105,9 +105,46 @@ async function init(): Promise<Client> {
         updated_at TEXT NOT NULL DEFAULT (datetime('now')),
         FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
       )`,
+      `CREATE TABLE IF NOT EXISTS memorial_rooms (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        owner_id INTEGER NOT NULL,
+        memorial_id INTEGER,
+        name TEXT NOT NULL,
+        description TEXT,
+        join_code TEXT NOT NULL UNIQUE,
+        status TEXT NOT NULL DEFAULT 'active',
+        created_at TEXT NOT NULL DEFAULT (datetime('now')),
+        FOREIGN KEY (owner_id) REFERENCES users(id) ON DELETE CASCADE,
+        FOREIGN KEY (memorial_id) REFERENCES memorial_pages(id) ON DELETE SET NULL
+      )`,
+      `CREATE TABLE IF NOT EXISTS room_posts (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        room_id INTEGER NOT NULL,
+        author_id INTEGER,
+        author_name TEXT NOT NULL,
+        content TEXT NOT NULL,
+        image_url TEXT,
+        created_at TEXT NOT NULL DEFAULT (datetime('now')),
+        FOREIGN KEY (room_id) REFERENCES memorial_rooms(id) ON DELETE CASCADE,
+        FOREIGN KEY (author_id) REFERENCES users(id) ON DELETE SET NULL
+      )`,
     ],
     "write"
   );
+
+  // Users table — new columns (ALTER TABLE idempotent migrations)
+  const migrations = [
+    "ALTER TABLE users ADD COLUMN auth_provider TEXT NOT NULL DEFAULT 'local'",
+    "ALTER TABLE users ADD COLUMN provider_id TEXT",
+    "ALTER TABLE users ADD COLUMN avatar_url TEXT",
+  ];
+  for (const sql of migrations) {
+    try {
+      await client.execute(sql);
+    } catch {
+      /* column already exists — expected */
+    }
+  }
 
   // 기본 슬라이드 시드 — 비어 있을 때만
   const existing = await client.execute("SELECT COUNT(*) as n FROM hero_slides");

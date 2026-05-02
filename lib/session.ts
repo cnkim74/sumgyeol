@@ -7,6 +7,7 @@ export type SessionData = {
   email?: string;
   name?: string;
   role?: Role;
+  avatarUrl?: string;
 };
 
 const DEV_PASSWORD =

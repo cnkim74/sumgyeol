@@ -14,6 +14,7 @@ export default async function Header() {
           roleLabel: ROLE_LABELS[session.role as Role],
           canPromo: PROMO_ELIGIBLE_ROLES.includes(session.role as Role),
           isAdmin: session.role === "admin",
+          avatarUrl: session.avatarUrl,
         }
       : null;
   return <HeaderClient user={user} />;

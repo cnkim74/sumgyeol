@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import Logomark from "./Logomark";
+import AvatarImage from "./AvatarImage";
 import type { Role } from "@/lib/roles";
 
 const NAV = [
@@ -23,6 +24,7 @@ export type HeaderUser = {
   roleLabel: string;
   canPromo: boolean;
   isAdmin: boolean;
+  avatarUrl?: string;
 };
 
 export default function HeaderClient({ user }: { user: HeaderUser | null }) {
@@ -100,6 +102,7 @@ export default function HeaderClient({ user }: { user: HeaderUser | null }) {
                 aria-expanded={userOpen}
                 onClick={() => setUserOpen((v) => !v)}
               >
+                <AvatarImage name={user.name} avatarUrl={user.avatarUrl} size={28} />
                 <span className="apple-user-name">{user.name}</span>
                 <span className="apple-user-role">{user.roleLabel}</span>
               </button>

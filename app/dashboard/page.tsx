@@ -3,6 +3,7 @@ import Link from "next/link";
 import { getSession } from "@/lib/session";
 import { getMemorialsByUser } from "@/lib/memorials";
 import { getObituariesByUser } from "@/lib/obituaries";
+import { getRoomsByOwner } from "@/lib/rooms";
 import { PROMO_ELIGIBLE_ROLES, type Role } from "@/lib/roles";
 
 export const metadata = { title: "대시보드 — 숨결" };
@@ -13,9 +14,10 @@ export default async function DashboardPage() {
     redirect("/login?next=/dashboard");
   }
   const role: Role = session.role;
-  const [memorials, obituaries] = await Promise.all([
+  const [memorials, obituaries, rooms] = await Promise.all([
     getMemorialsByUser(session.userId!),
     getObituariesByUser(session.userId!),
+    getRoomsByOwner(session.userId!),
   ]);
 
   return (
@@ -152,6 +154,53 @@ export default async function DashboardPage() {
               ))}
               <Link href="/dashboard/obituary/new" className="btn btn-soft text-[14px] py-2.5 px-5 self-start mt-1">
                 + 새 부고장
+              </Link>
+            </div>
+          )}
+        </div>
+
+        {/* 나의 추모방 */}
+        <div className="mb-6 mt-10">
+          <h2 className="text-[11px] font-semibold uppercase tracking-widest text-[var(--color-ink-mute)] mb-3">
+            나의 추모방
+          </h2>
+          {rooms.length === 0 ? (
+            <div className="dash-card" style={{ gap: 20 }}>
+              <span className="dash-card-icon">🗝</span>
+              <div className="flex-1">
+                <p className="dash-card-title">추모방 만들기</p>
+                <p className="dash-card-desc">
+                  가족·지인과 함께 추모 글을 나누는 공간입니다. 초대 코드로 접근할 수 있어요.
+                </p>
+              </div>
+              <Link href="/dashboard/room/new" className="btn btn-primary text-[14px] py-2.5 px-5 shrink-0">
+                만들기
+              </Link>
+            </div>
+          ) : (
+            <div className="flex flex-col gap-3">
+              {rooms.map((r) => (
+                <div key={r.id} className="dashboard-memorial-row">
+                  <div className="dmr-avatar" style={{ background: "var(--color-bg-deep)", fontSize: 18 }}>
+                    🗝
+                  </div>
+                  <div className="dmr-info">
+                    <p className="dmr-name">{r.name}</p>
+                    <p className="dmr-meta">초대코드 {r.joinCode}</p>
+                  </div>
+                  <div className="dmr-actions">
+                    <Link
+                      href={`/추모방/${r.joinCode}`}
+                      className="dmr-link"
+                      target="_blank"
+                    >
+                      방문 →
+                    </Link>
+                  </div>
+                </div>
+              ))}
+              <Link href="/dashboard/room/new" className="btn btn-soft text-[14px] py-2.5 px-5 self-start mt-1">
+                + 새 추모방
               </Link>
             </div>
           )}

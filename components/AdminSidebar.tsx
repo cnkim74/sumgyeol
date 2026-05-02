@@ -28,6 +28,7 @@ const NAV: { section: string; items: NavItem[] }[] = [
     items: [
       { href: "/admin/obituaries", icon: "📨", label: "부고장" },
       { href: "/admin/memorials", icon: "🏞", label: "하늘공원 페이지" },
+      { href: "/admin/rooms", icon: "🗝", label: "추모방" },
     ],
   },
   {
