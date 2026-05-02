@@ -738,19 +738,36 @@ body {
   border-bottom: none;
 }
 
-/* ─── 푸터 ─────────────────────────────────────────────── */
+/* ─── 푸터 — 검정 단색 ─────────────────────────────────── */
 .site-footer {
-  background: var(--color-bg-soft);
-  border-top: 1px solid var(--color-rule);
+  background: #0a0a0a;
+  color: var(--color-paper);
   margin-top: 80px;
 }
 
+.site-footer .brand-lockup,
+.site-footer .brand-lockup-text {
+  color: var(--color-paper);
+}
+
+.site-footer .kicker {
+  color: rgba(245, 241, 230, 0.55);
+}
+
+.footer-text {
+  color: rgba(245, 241, 230, 0.72);
+}
+
+.footer-meta {
+  color: rgba(245, 241, 230, 0.45);
+}
+
 .footer-link {
-  color: var(--color-ink-soft);
+  color: rgba(245, 241, 230, 0.72);
   font-size: 14px;
   transition: color 0.15s ease;
 }
-.footer-link:hover { color: var(--color-ink); }
+.footer-link:hover { color: var(--color-paper); }
 
 /* ─── 섹션 컨테이너 ─────────────────────────────────────── */
 .container {
