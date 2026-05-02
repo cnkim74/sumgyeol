@@ -1,6 +1,7 @@
 import { createClient, type Client } from "@libsql/client";
 import path from "node:path";
 import fs from "node:fs/promises";
+import { pathToFileURL } from "node:url";
 
 let dbPromise: Promise<Client> | null = null;
 
@@ -15,7 +16,7 @@ async function init(): Promise<Client> {
       ? "/tmp"
       : path.join(process.cwd(), "data");
     await fs.mkdir(dataDir, { recursive: true });
-    url = `file:${path.join(dataDir, "sumgyeol.db")}`;
+    url = pathToFileURL(path.join(dataDir, "sumgyeol.db")).href;
     authToken = undefined;
   }
 
@@ -50,6 +51,30 @@ async function init(): Promise<Client> {
         alt TEXT,
         sort_order INTEGER NOT NULL DEFAULT 0,
         created_at TEXT NOT NULL DEFAULT (datetime('now'))
+      )`,
+      `CREATE TABLE IF NOT EXISTS memorial_pages (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        user_id INTEGER NOT NULL,
+        slug TEXT NOT NULL UNIQUE,
+        deceased_name TEXT NOT NULL,
+        born_date TEXT,
+        died_date TEXT,
+        bio TEXT,
+        profile_image TEXT,
+        cover_image TEXT,
+        status TEXT NOT NULL DEFAULT 'draft',
+        created_at TEXT NOT NULL DEFAULT (datetime('now')),
+        updated_at TEXT NOT NULL DEFAULT (datetime('now')),
+        FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+      )`,
+      `CREATE TABLE IF NOT EXISTS memorial_messages (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        memorial_id INTEGER NOT NULL,
+        author_name TEXT NOT NULL,
+        author_email TEXT,
+        content TEXT NOT NULL,
+        created_at TEXT NOT NULL DEFAULT (datetime('now')),
+        FOREIGN KEY (memorial_id) REFERENCES memorial_pages(id) ON DELETE CASCADE
       )`,
     ],
     "write"

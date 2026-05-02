@@ -1,117 +1,86 @@
 import Link from "next/link";
-import { notFound } from "next/navigation";
-import { getSession } from "@/lib/session";
 import { listUsers } from "@/lib/users";
 import { listPromoRequests } from "@/lib/promo";
-import { ROLE_LABELS } from "@/lib/roles";
+import { listAllMemorials } from "@/lib/memorials";
 
-export const metadata = { title: "관리" };
+export const metadata = { title: "관리 대시보드" };
 
-export default async function AdminPage() {
-  const session = await getSession();
-  if (session.role !== "admin") notFound();
-
-  const [users, promos] = await Promise.all([
+export default async function AdminDashboardPage() {
+  const [users, promos, memorials] = await Promise.all([
     listUsers(),
     listPromoRequests(),
+    listAllMemorials(),
   ]);
 
+  const pendingPromos = promos.filter((p) => p.status === "pending").length;
+  const liveMemorials = memorials.filter((m) => m.status === "live").length;
+
+  const stats = [
+    { label: "전체 회원", value: users.length, href: "/admin/users", icon: "👤" },
+    { label: "홍보 신청", value: promos.length, sub: pendingPromos ? `대기 ${pendingPromos}건` : undefined, href: "/admin/promos", icon: "📣" },
+    { label: "하늘공원", value: memorials.length, sub: `공개 ${liveMemorials}개`, href: "/admin/memorials", icon: "🏞" },
+    { label: "홈 슬라이더", value: "관리", href: "/admin/slides", icon: "🖼" },
+  ];
+
+  const recentUsers = users.slice(0, 5);
+
   return (
-    <section className="section">
-      <div className="container max-w-5xl">
-        <p className="kicker mb-3">관리</p>
-        <h1 className="display-md mb-8">전체 회원 · 신청</h1>
-
-        {/* 빠른 메뉴 */}
-        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3 mb-12">
-          <Link href="/admin/slides" className="card lift !p-5">
-            <h3 className="card-title text-[1.15rem]">홈 슬라이더 관리</h3>
-            <p className="text-[13px] text-[var(--color-ink-mute)] leading-[1.6]">
-              첫 화면 풀스크린 이미지 추가·삭제·순서 변경.
-            </p>
-          </Link>
-        </div>
-
-        <h2 className="text-[1.4rem] font-bold mb-3">회원 ({users.length})</h2>
-        <div className="overflow-x-auto rounded-xl border border-[var(--color-rule)] bg-[var(--color-paper)] mb-12">
-          <table className="w-full text-[14px]">
-            <thead className="bg-[var(--color-bg-soft)]">
-              <tr>
-                <th className="text-left p-3 font-semibold">이름</th>
-                <th className="text-left p-3 font-semibold">이메일</th>
-                <th className="text-left p-3 font-semibold">등급</th>
-                <th className="text-left p-3 font-semibold">기관</th>
-                <th className="text-left p-3 font-semibold">가입일</th>
-              </tr>
-            </thead>
-            <tbody>
-              {users.length === 0 ? (
-                <tr>
-                  <td colSpan={5} className="p-6 text-center text-[var(--color-ink-mute)]">
-                    아직 회원이 없습니다.
-                  </td>
-                </tr>
-              ) : (
-                users.map((u) => (
-                  <tr key={u.id} className="border-t border-[var(--color-rule)]">
-                    <td className="p-3">{u.name}</td>
-                    <td className="p-3">{u.email}</td>
-                    <td className="p-3">
-                      <span className="role-badge">{ROLE_LABELS[u.role]}</span>
-                    </td>
-                    <td className="p-3">{u.organization ?? "—"}</td>
-                    <td className="p-3 text-[var(--color-ink-mute)]">
-                      {u.createdAt.slice(0, 10)}
-                    </td>
-                  </tr>
-                ))
-              )}
-            </tbody>
-          </table>
-        </div>
-
-        <h2 className="text-[1.4rem] font-bold mb-3">
-          홍보 배너 신청 ({promos.length})
-        </h2>
-        <div className="overflow-x-auto rounded-xl border border-[var(--color-rule)] bg-[var(--color-paper)]">
-          <table className="w-full text-[14px]">
-            <thead className="bg-[var(--color-bg-soft)]">
-              <tr>
-                <th className="text-left p-3 font-semibold">기관</th>
-                <th className="text-left p-3 font-semibold">유형</th>
-                <th className="text-left p-3 font-semibold">메시지</th>
-                <th className="text-left p-3 font-semibold">상태</th>
-                <th className="text-left p-3 font-semibold">신청일</th>
-              </tr>
-            </thead>
-            <tbody>
-              {promos.length === 0 ? (
-                <tr>
-                  <td colSpan={5} className="p-6 text-center text-[var(--color-ink-mute)]">
-                    아직 신청이 없습니다.
-                  </td>
-                </tr>
-              ) : (
-                promos.map((p) => (
-                  <tr key={p.id} className="border-t border-[var(--color-rule)]">
-                    <td className="p-3 font-medium">{p.organization}</td>
-                    <td className="p-3">{p.bannerType ?? "—"}</td>
-                    <td className="p-3 max-w-xs truncate" title={p.message ?? ""}>
-                      {p.message ?? "—"}
-                    </td>
-                    <td className="p-3">
-                      <span className="role-badge">{p.status}</span>
-                    </td>
-                    <td className="p-3 text-[var(--color-ink-mute)]">
-                      {p.createdAt.slice(0, 10)}
-                    </td>
-                  </tr>
-                ))
-              )}
-            </tbody>
-          </table>
+    <div className="notion-page">
+      <div className="notion-page-header">
+        <span className="notion-page-icon">⬛</span>
+        <div>
+          <h1 className="notion-page-title">대시보드</h1>
+          <p className="notion-page-desc">숨결 플랫폼 현황을 한눈에</p>
         </div>
       </div>
-    </section>
+
+      {/* 통계 카드 */}
+      <div className="notion-stat-grid">
+        {stats.map((s) => (
+          <Link key={s.href} href={s.href} className="notion-stat-card">
+            <span className="notion-stat-icon">{s.icon}</span>
+            <div className="notion-stat-body">
+              <div className="notion-stat-label">{s.label}</div>
+              <div className="notion-stat-value">{s.value}</div>
+              {s.sub && <div className="notion-stat-sub">{s.sub}</div>}
+            </div>
+          </Link>
+        ))}
+      </div>
+
+      {/* 최근 가입 */}
+      <section className="notion-section">
+        <div className="notion-section-header">
+          <h2 className="notion-section-title">최근 가입 회원</h2>
+          <Link href="/admin/users" className="notion-section-link">전체 보기 →</Link>
+        </div>
+        <div className="notion-table-wrap">
+          <table className="notion-table">
+            <thead>
+              <tr>
+                <th>이름</th>
+                <th>이메일</th>
+                <th>등급</th>
+                <th>가입일</th>
+              </tr>
+            </thead>
+            <tbody>
+              {recentUsers.length === 0 ? (
+                <tr><td colSpan={4} className="notion-table-empty">아직 회원이 없습니다.</td></tr>
+              ) : (
+                recentUsers.map((u) => (
+                  <tr key={u.id}>
+                    <td className="font-medium">{u.name}</td>
+                    <td className="text-[var(--notion-text-mute)]">{u.email}</td>
+                    <td><span className={`notion-badge notion-badge-${u.role}`}>{u.role}</span></td>
+                    <td className="text-[var(--notion-text-mute)]">{u.createdAt.slice(0, 10)}</td>
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </div>
   );
 }

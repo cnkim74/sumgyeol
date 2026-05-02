@@ -1086,3 +1086,821 @@ body {
   text-transform: uppercase;
   opacity: 0.85;
 }
+
+/* ═══════════════════════════════════════════════════════════
+   NOTION 스타일 어드민 레이아웃
+   ═══════════════════════════════════════════════════════════ */
+
+:root {
+  --notion-bg: #f7f7f5;
+  --notion-sidebar: #ffffff;
+  --notion-sidebar-border: #e9e9e7;
+  --notion-text: #37352f;
+  --notion-text-mute: #9b9a97;
+  --notion-hover: #f1f1f0;
+  --notion-active: #e9e9e7;
+  --notion-border: #e9e9e7;
+}
+
+/* 전체 레이아웃 — header 아래부터 */
+.notion-layout {
+  display: flex;
+  min-height: calc(100dvh - 48px);
+  background: var(--notion-bg);
+}
+
+/* 사이드바 */
+.notion-sidebar {
+  width: 240px;
+  flex-shrink: 0;
+  background: var(--notion-sidebar);
+  border-right: 1px solid var(--notion-sidebar-border);
+  display: flex;
+  flex-direction: column;
+  position: sticky;
+  top: 48px;
+  height: calc(100dvh - 48px);
+  overflow-y: auto;
+}
+
+.notion-sidebar-header {
+  padding: 18px 16px 10px;
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  border-bottom: 1px solid var(--notion-sidebar-border);
+}
+
+.notion-sidebar-logo {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--notion-text);
+  letter-spacing: -0.01em;
+}
+
+.notion-sidebar-sub {
+  font-size: 11px;
+  color: var(--notion-text-mute);
+  font-weight: 500;
+}
+
+.notion-nav {
+  flex: 1;
+  padding: 10px 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.notion-nav-group {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  margin-bottom: 8px;
+}
+
+.notion-nav-section {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--notion-text-mute);
+  padding: 6px 8px 2px;
+  text-transform: uppercase;
+}
+
+.notion-nav-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 8px;
+  border-radius: 6px;
+  font-size: 14px;
+  color: var(--notion-text);
+  font-weight: 400;
+  transition: background 0.1s ease;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.notion-nav-item:hover { background: var(--notion-hover); }
+.notion-nav-item.active {
+  background: var(--notion-active);
+  font-weight: 500;
+}
+
+.notion-nav-icon {
+  font-size: 15px;
+  width: 20px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.notion-sidebar-footer {
+  padding: 8px;
+  border-top: 1px solid var(--notion-sidebar-border);
+}
+
+/* 메인 콘텐츠 */
+.notion-main {
+  flex: 1;
+  min-width: 0;
+  overflow-y: auto;
+}
+
+/* 페이지 래퍼 */
+.notion-page {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 48px 48px 80px;
+}
+
+@media (max-width: 640px) {
+  .notion-sidebar { width: 200px; }
+  .notion-page { padding: 28px 20px 60px; }
+}
+
+/* 페이지 헤더 */
+.notion-page-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  margin-bottom: 36px;
+}
+
+.notion-page-icon {
+  font-size: 42px;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.notion-page-title {
+  font-size: 2rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--notion-text);
+  line-height: 1.2;
+}
+
+.notion-page-desc {
+  font-size: 14px;
+  color: var(--notion-text-mute);
+  margin-top: 4px;
+}
+
+/* 통계 카드 그리드 */
+.notion-stat-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 12px;
+  margin-bottom: 40px;
+}
+
+.notion-stat-card {
+  background: var(--notion-sidebar);
+  border: 1px solid var(--notion-border);
+  border-radius: 10px;
+  padding: 16px;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  text-decoration: none;
+  transition: box-shadow 0.15s ease, border-color 0.15s ease;
+}
+
+.notion-stat-card:hover {
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  border-color: #d3d1cb;
+}
+
+.notion-stat-icon {
+  font-size: 22px;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.notion-stat-body { flex: 1; min-width: 0; }
+
+.notion-stat-label {
+  font-size: 12px;
+  color: var(--notion-text-mute);
+  font-weight: 500;
+  margin-bottom: 4px;
+}
+
+.notion-stat-value {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--notion-text);
+  line-height: 1.2;
+}
+
+.notion-stat-sub {
+  font-size: 11px;
+  color: var(--notion-text-mute);
+  margin-top: 2px;
+}
+
+/* 섹션 */
+.notion-section { margin-bottom: 40px; }
+
+.notion-section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.notion-section-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--notion-text);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.notion-section-link {
+  font-size: 12px;
+  color: var(--notion-text-mute);
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+
+.notion-section-link:hover { color: var(--notion-text); }
+
+/* Notion 테이블 */
+.notion-table-wrap {
+  border: 1px solid var(--notion-border);
+  border-radius: 8px;
+  overflow: hidden;
+  background: var(--notion-sidebar);
+}
+
+.notion-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13.5px;
+  color: var(--notion-text);
+}
+
+.notion-table thead tr {
+  background: #f9f9f8;
+  border-bottom: 1px solid var(--notion-border);
+}
+
+.notion-table th {
+  text-align: left;
+  padding: 9px 12px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--notion-text-mute);
+  white-space: nowrap;
+}
+
+.notion-table td {
+  padding: 10px 12px;
+  vertical-align: middle;
+}
+
+.notion-table tbody tr {
+  border-top: 1px solid var(--notion-border);
+  transition: background 0.1s ease;
+}
+
+.notion-table tbody tr:first-child { border-top: none; }
+.notion-table tbody tr:hover { background: #fafaf9; }
+
+.notion-table-empty {
+  text-align: center;
+  padding: 32px 16px !important;
+  color: var(--notion-text-mute);
+  font-size: 13px;
+}
+
+/* Notion 배지 */
+.notion-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.6;
+}
+
+.notion-badge-admin    { background: #2d2d2d; color: #fff; }
+.notion-badge-member   { background: #e8e8e5; color: var(--notion-text); }
+.notion-badge-funeral  { background: #dde4f0; color: #3b4d78; }
+.notion-badge-park     { background: #d4ede8; color: #2e6259; }
+.notion-badge-pending  { background: #fef3c7; color: #92400e; }
+.notion-badge-approved { background: #d1fae5; color: #065f46; }
+.notion-badge-rejected { background: #fee2e2; color: #991b1b; }
+.notion-badge-live     { background: #d1fae5; color: #065f46; }
+.notion-badge-draft    { background: #f3f4f6; color: #6b7280; }
+
+/* ═══════════════════════════════════════════════════════════
+   하늘공원 공개 페이지
+   ═══════════════════════════════════════════════════════════ */
+
+.memorial-cover {
+  position: relative;
+  min-height: 480px;
+  background-color: #1a1a1a;
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  align-items: flex-end;
+  padding-bottom: 80px;
+  margin-top: -48px;
+}
+
+.memorial-cover-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(0,0,0,0.1) 0%,
+    rgba(0,0,0,0.55) 60%,
+    rgba(0,0,0,0.8) 100%
+  );
+}
+
+.memorial-cover-content {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 0 24px;
+  text-align: center;
+  color: #fff;
+}
+
+.memorial-avatar-wrap {
+  margin-bottom: 4px;
+}
+
+.memorial-avatar {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid rgba(255,255,255,0.6);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+}
+
+.memorial-avatar-fallback {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.15);
+  border: 3px solid rgba(255,255,255,0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 40px;
+  font-weight: 700;
+  color: rgba(255,255,255,0.85);
+}
+
+.memorial-name {
+  font-size: clamp(2rem, 5vw, 3rem);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+  color: #fff;
+}
+
+.memorial-years {
+  font-size: 16px;
+  color: rgba(255,255,255,0.7);
+  letter-spacing: 0.04em;
+}
+
+.memorial-tagline {
+  font-size: 14px;
+  color: rgba(255,255,255,0.5);
+  letter-spacing: 0.06em;
+  margin-top: 4px;
+}
+
+/* 본문 */
+.memorial-body {
+  padding-top: 64px;
+  padding-bottom: 120px;
+}
+
+.memorial-section {
+  margin-bottom: 60px;
+}
+
+.memorial-section-title {
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-ink-mute);
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.memorial-count {
+  font-size: 11px;
+  background: var(--color-bg-soft);
+  color: var(--color-ink-mute);
+  padding: 1px 7px;
+  border-radius: 999px;
+  letter-spacing: 0;
+  font-weight: 600;
+}
+
+.memorial-bio {
+  font-size: 17px;
+  line-height: 1.9;
+  color: var(--color-ink-soft);
+  white-space: pre-wrap;
+  word-break: keep-all;
+}
+
+/* 추모 메시지 */
+.memorial-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 32px;
+  background: var(--color-paper);
+  border: 1px solid var(--color-rule);
+  border-radius: 14px;
+  padding: 20px;
+}
+
+.memorial-form-input,
+.memorial-form-textarea {
+  width: 100%;
+  background: var(--color-bg);
+  border: 1px solid var(--color-rule);
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-family: var(--font-sans);
+  font-size: 14px;
+  color: var(--color-ink);
+  resize: none;
+  outline: none;
+  transition: border-color 0.15s ease;
+}
+
+.memorial-form-input:focus,
+.memorial-form-textarea:focus {
+  border-color: var(--color-ink-mute);
+}
+
+.memorial-form-error {
+  font-size: 13px;
+  color: #b91c1c;
+}
+
+.memorial-form-btn {
+  align-self: flex-end;
+  font-size: 14px;
+  padding: 10px 20px;
+  border-radius: 8px;
+}
+
+.memorial-form-done {
+  padding: 16px;
+  background: #d1fae5;
+  border-radius: 10px;
+  font-size: 14px;
+  color: #065f46;
+  margin-bottom: 24px;
+}
+
+.memorial-messages {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.memorial-empty {
+  font-size: 14px;
+  color: var(--color-ink-mute);
+  text-align: center;
+  padding: 32px 0;
+}
+
+.memorial-message {
+  background: var(--color-paper);
+  border: 1px solid var(--color-rule);
+  border-radius: 12px;
+  padding: 16px 18px;
+}
+
+.memorial-message-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.memorial-message-author {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-ink);
+}
+
+.memorial-message-date {
+  font-size: 12px;
+  color: var(--color-ink-mute);
+}
+
+.memorial-message-content {
+  font-size: 15px;
+  line-height: 1.7;
+  color: var(--color-ink-soft);
+  white-space: pre-wrap;
+  word-break: keep-all;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   대시보드 — 하늘공원 중심
+   ═══════════════════════════════════════════════════════════ */
+
+/* 빈 상태 카드 */
+.dashboard-heaven-empty {
+  background: var(--color-paper);
+  border: 1.5px dashed var(--color-rule);
+  border-radius: 20px;
+  padding: 40px 32px;
+  display: flex;
+  align-items: center;
+  gap: 32px;
+}
+
+@media (max-width: 640px) {
+  .dashboard-heaven-empty {
+    flex-direction: column;
+    text-align: center;
+  }
+}
+
+.dhe-visual {
+  flex-shrink: 0;
+  width: 72px;
+  height: 72px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dhe-circle {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--color-bg-soft) 0%, var(--color-bg-deep) 100%);
+}
+
+.dhe-lines {
+  position: absolute;
+  bottom: -4px;
+  right: -4px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.dhe-line {
+  height: 6px;
+  width: 36px;
+  border-radius: 3px;
+  background: var(--color-rule);
+}
+
+.dhe-line.short { width: 24px; }
+.dhe-line.x-short { width: 16px; }
+
+.dhe-text h3 {
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--color-ink);
+  margin-bottom: 6px;
+}
+
+.dhe-text p {
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--color-ink-mute);
+  word-break: keep-all;
+  max-width: 360px;
+}
+
+/* 등록된 하늘공원 row */
+.dashboard-memorial-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: var(--color-paper);
+  border: 1px solid var(--color-rule);
+  border-radius: 14px;
+  padding: 14px 18px;
+  transition: box-shadow 0.15s ease;
+}
+
+.dashboard-memorial-row:hover {
+  box-shadow: 0 4px 12px -4px rgba(10,10,10,0.10);
+}
+
+.dmr-avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  overflow: hidden;
+  flex-shrink: 0;
+  background: var(--color-bg-deep);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--color-ink-mute);
+}
+
+.dmr-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.dmr-info { flex: 1; min-width: 0; }
+
+.dmr-name {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--color-ink);
+}
+
+.dmr-meta {
+  font-size: 12px;
+  color: var(--color-ink-mute);
+  margin-top: 2px;
+}
+
+.dmr-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.dmr-link {
+  font-size: 13px;
+  color: var(--color-ink-mute);
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+
+.dmr-link:hover { color: var(--color-ink); }
+
+/* 대시보드 카드 */
+.dash-card {
+  background: var(--color-paper);
+  border: 1px solid var(--color-rule);
+  border-radius: 14px;
+  padding: 18px 20px;
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+}
+
+.dash-card.hoverable {
+  text-decoration: none;
+  transition: box-shadow 0.15s ease, border-color 0.15s ease;
+  cursor: pointer;
+}
+
+.dash-card.hoverable:hover {
+  box-shadow: 0 4px 12px -4px rgba(10,10,10,0.10);
+  border-color: var(--color-bg-deep);
+}
+
+.dash-card-icon {
+  font-size: 24px;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.dash-card-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--color-ink);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+.dash-card-badge {
+  font-size: 11px;
+  font-weight: 500;
+  background: var(--color-bg-soft);
+  color: var(--color-ink-mute);
+  padding: 1px 7px;
+  border-radius: 999px;
+}
+
+.dash-card-desc {
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--color-ink-mute);
+  word-break: keep-all;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   하늘공원 편집기 (MemorialEditor)
+   ═══════════════════════════════════════════════════════════ */
+
+.memorial-editor-form {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+.me-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.me-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.me-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-ink);
+}
+
+.me-label-sub {
+  font-size: 12px;
+  font-weight: 400;
+  color: var(--color-ink-mute);
+}
+
+.me-input,
+.me-textarea {
+  background: var(--color-paper);
+  border: 1px solid var(--color-rule);
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-family: var(--font-sans);
+  font-size: 15px;
+  color: var(--color-ink);
+  outline: none;
+  transition: border-color 0.15s ease;
+  width: 100%;
+}
+
+.me-input:focus,
+.me-textarea:focus {
+  border-color: var(--color-ink-mute);
+}
+
+.me-textarea {
+  resize: vertical;
+  line-height: 1.6;
+}
+
+.me-radio-group {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.me-radio {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: var(--color-ink-soft);
+  cursor: pointer;
+}
+
+.me-error {
+  font-size: 13px;
+  color: #b91c1c;
+}
+
+.me-actions {
+  display: flex;
+  gap: 10px;
+  padding-top: 4px;
+}

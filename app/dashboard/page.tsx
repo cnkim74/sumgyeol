@@ -1,13 +1,10 @@
 import { redirect } from "next/navigation";
 import Link from "next/link";
 import { getSession } from "@/lib/session";
-import {
-  ROLE_LABELS,
-  PROMO_ELIGIBLE_ROLES,
-  type Role,
-} from "@/lib/roles";
+import { getMemorialsByUser } from "@/lib/memorials";
+import { PROMO_ELIGIBLE_ROLES, type Role } from "@/lib/roles";
 
-export const metadata = { title: "내 정보" };
+export const metadata = { title: "나의 하늘공원" };
 
 export default async function DashboardPage() {
   const session = await getSession();
@@ -15,50 +12,157 @@ export default async function DashboardPage() {
     redirect("/login?next=/dashboard");
   }
   const role: Role = session.role;
+  const memorials = await getMemorialsByUser(session.userId!);
 
   return (
-    <section className="section">
-      <div className="container max-w-3xl">
-        <p className="kicker mb-3">내 정보</p>
-        <h1 className="display-md mb-4">
-          {session.name} 님, 환영합니다.
-        </h1>
-        <p className="lead">
-          현재 등급:{" "}
-          <span className="role-badge">
-            {ROLE_LABELS[role]}
-          </span>
-        </p>
+    <div className="min-h-[calc(100dvh-48px)] bg-[#f7f7f5]">
+      <div className="container max-w-3xl py-12">
 
-        <div className="mt-12 grid gap-4 md:grid-cols-2">
-          {PROMO_ELIGIBLE_ROLES.includes(role) && (
-            <Link href="/promo" className="card lift">
-              <h3 className="card-title">홍보 배너 신청</h3>
-              <p className="text-[14px] text-[var(--color-ink-mute)] leading-[1.6]">
-                숨결 페이지에 기관 홍보 배너를 노출 신청합니다.
-                담당자가 검토 후 회신해요.
-              </p>
-            </Link>
-          )}
-          {role === "admin" && (
-            <Link href="/admin" className="card lift">
-              <h3 className="card-title">관리</h3>
-              <p className="text-[14px] text-[var(--color-ink-mute)] leading-[1.6]">
-                전체 회원과 신청 목록을 봅니다.
-              </p>
-            </Link>
-          )}
-          {role === "member" && (
-            <div className="card">
-              <h3 className="card-title">곧 열립니다</h3>
-              <p className="text-[14px] text-[var(--color-ink-mute)] leading-[1.6]">
-                일반회원의 모음·보냄·머무름은 다음 단계에서 열립니다.
-                사전 신청자에겐 1년치 모음 구독이 무료로 제공돼요.
-              </p>
+        {/* 인사 */}
+        <p className="text-[13px] font-medium tracking-widest uppercase text-[var(--color-ink-mute)] mb-1">
+          숨결
+        </p>
+        <h1 className="text-[2rem] font-bold tracking-tight mb-8">
+          {session.name} 님
+        </h1>
+
+        {/* 하늘공원 카드 — 메인 피처 */}
+        <div className="mb-6">
+          <h2 className="text-[11px] font-semibold uppercase tracking-widest text-[var(--color-ink-mute)] mb-3">
+            나의 하늘공원
+          </h2>
+
+          {memorials.length === 0 ? (
+            <div className="dashboard-heaven-empty">
+              <div className="dhe-visual">
+                <div className="dhe-circle" />
+                <div className="dhe-lines">
+                  <div className="dhe-line" />
+                  <div className="dhe-line short" />
+                  <div className="dhe-line x-short" />
+                </div>
+              </div>
+              <div className="dhe-text">
+                <h3>온라인 하늘공원을 만들어 보세요</h3>
+                <p>
+                  소중한 분을 추억하는 공간입니다. 생전 사진, 약력, 추모 메시지를
+                  한곳에 모아 가족·지인과 나눌 수 있어요.
+                </p>
+                <Link href="/dashboard/memorial/new" className="btn btn-primary mt-2 text-[15px] py-3 px-6">
+                  하늘공원 만들기
+                </Link>
+              </div>
+            </div>
+          ) : (
+            <div className="flex flex-col gap-3">
+              {memorials.map((m) => (
+                <div key={m.id} className="dashboard-memorial-row">
+                  <div className="dmr-avatar">
+                    {m.profileImage ? (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img src={m.profileImage} alt={m.deceasedName} />
+                    ) : (
+                      <span>{m.deceasedName.charAt(0)}</span>
+                    )}
+                  </div>
+                  <div className="dmr-info">
+                    <p className="dmr-name">{m.deceasedName}</p>
+                    <p className="dmr-meta">
+                      {m.bornDate && `${m.bornDate.slice(0, 4)}년생`}
+                      {m.bornDate && m.diedDate && " · "}
+                      {m.diedDate && `${m.diedDate.slice(0, 4)}년 별세`}
+                    </p>
+                  </div>
+                  <div className="dmr-actions">
+                    <span className={`notion-badge notion-badge-${m.status === "live" ? "approved" : "pending"}`}>
+                      {m.status === "live" ? "공개" : "초안"}
+                    </span>
+                    {m.status === "live" && (
+                      <Link
+                        href={`/하늘/${m.slug}`}
+                        className="dmr-link"
+                        target="_blank"
+                      >
+                        방문 →
+                      </Link>
+                    )}
+                    <Link href={`/dashboard/memorial/${m.id}`} className="dmr-link">
+                      편집
+                    </Link>
+                  </div>
+                </div>
+              ))}
+              <Link href="/dashboard/memorial/new" className="btn btn-soft text-[14px] py-2.5 px-5 self-start mt-1">
+                + 새 하늘공원
+              </Link>
             </div>
           )}
         </div>
+
+        {/* 빠른 메뉴 */}
+        <h2 className="text-[11px] font-semibold uppercase tracking-widest text-[var(--color-ink-mute)] mb-3 mt-10">
+          서비스
+        </h2>
+        <div className="grid gap-3 sm:grid-cols-2">
+          <DashCard
+            icon="📸"
+            title="모음"
+            desc="사진·영상·글을 생전에 모아 둡니다."
+            badge="준비 중"
+          />
+          <DashCard
+            icon="📨"
+            title="부고 알림"
+            desc="카카오톡·문자로 부고를 발송합니다."
+            badge="준비 중"
+          />
+          {PROMO_ELIGIBLE_ROLES.includes(role) && (
+            <Link href="/promo" className="dash-card hoverable">
+              <span className="dash-card-icon">📣</span>
+              <div>
+                <p className="dash-card-title">홍보 배너 신청</p>
+                <p className="dash-card-desc">
+                  숨결 페이지에 기관 홍보 배너를 신청합니다.
+                </p>
+              </div>
+            </Link>
+          )}
+          {role === "admin" && (
+            <Link href="/admin" className="dash-card hoverable">
+              <span className="dash-card-icon">⬛</span>
+              <div>
+                <p className="dash-card-title">관리자 페이지</p>
+                <p className="dash-card-desc">회원·하늘공원·슬라이더 관리.</p>
+              </div>
+            </Link>
+          )}
+        </div>
       </div>
-    </section>
+    </div>
+  );
+}
+
+function DashCard({
+  icon,
+  title,
+  desc,
+  badge,
+}: {
+  icon: string;
+  title: string;
+  desc: string;
+  badge?: string;
+}) {
+  return (
+    <div className="dash-card">
+      <span className="dash-card-icon">{icon}</span>
+      <div className="flex-1">
+        <p className="dash-card-title">
+          {title}
+          {badge && <span className="dash-card-badge">{badge}</span>}
+        </p>
+        <p className="dash-card-desc">{desc}</p>
+      </div>
+    </div>
   );
 }
