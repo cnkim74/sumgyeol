@@ -59,7 +59,7 @@ function MailIcon() {
 export default function Footer() {
   return (
     <footer className="site-footer">
-      <div className="container py-16 grid gap-12 md:gap-10 md:grid-cols-[1.6fr_1fr_1fr_1fr] text-[15px]">
+      <div className="container pt-20 md:pt-24 pb-12 md:pb-14 grid gap-12 md:gap-10 md:grid-cols-[1.6fr_1fr_1fr_1fr] text-[15px]">
         {/* 브랜드 블록 */}
         <div>
           <Link href="/" className="footer-brand-row" aria-label="숨결 — 처음으로">
