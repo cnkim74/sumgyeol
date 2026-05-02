@@ -2,6 +2,28 @@ import { getDb } from "./db";
 import { hashPassword, verifyPassword } from "./auth";
 import { canSignupAs, ORG_REQUIRED_ROLES, type Role } from "./roles";
 
+// ADMIN_EMAILS 환경변수에 콤마로 적은 이메일은 가입·로그인 시 자동으로 admin 등급으로 승격.
+// 예) ADMIN_EMAILS="cnkim@example.com,founder@sumgyeol.kr"
+function isPromotedAdmin(email: string): boolean {
+  const list = (process.env.ADMIN_EMAILS ?? "")
+    .split(",")
+    .map((s) => s.trim().toLowerCase())
+    .filter(Boolean);
+  return list.includes(email.toLowerCase());
+}
+
+async function promoteIfAdminEmail(user: User): Promise<User> {
+  if (user.role === "admin") return user;
+  if (!isPromotedAdmin(user.email)) return user;
+  const db = await getDb();
+  await db.execute({
+    sql: "UPDATE users SET role = 'admin' WHERE id = ?",
+    args: [user.id],
+  });
+  console.log(`[users] auto-promoted ${user.email} → admin (ADMIN_EMAILS)`);
+  return { ...user, role: "admin" };
+}
+
 export type User = {
   id: number;
   email: string;
@@ -59,7 +81,8 @@ export async function createUser(input: UserInput): Promise<CreateResult> {
           VALUES (?, ?, ?, ?, ?, ?) RETURNING *`,
     args: [email, name, passwordHash, role, organization, phone],
   });
-  return { user: rowToUser(result.rows[0] as Record<string, unknown>) };
+  const fresh = rowToUser(result.rows[0] as Record<string, unknown>);
+  return { user: await promoteIfAdminEmail(fresh) };
 }
 
 export async function authenticateUser(
@@ -77,7 +100,8 @@ export async function authenticateUser(
   const row = result.rows[0] as Record<string, unknown>;
   const ok = await verifyPassword(password, row.password_hash as string);
   if (!ok) return { error: "이메일 또는 비밀번호를 확인해 주세요." };
-  return { user: rowToUser(row) };
+  const fresh = rowToUser(row);
+  return { user: await promoteIfAdminEmail(fresh) };
 }
 
 export async function findUserById(id: number): Promise<User | null> {
