@@ -164,7 +164,7 @@ export default function Footer() {
         <div className="footer-meta text-[13px]">
           © {new Date().getFullYear()} 숨결 (sumgyeol). All rights reserved.
         </div>
-        <div className="footer-tagline-en">Breath remains.</div>
+        <div className="footer-tagline-en">A breath, kept.</div>
       </div>
     </footer>
   );
