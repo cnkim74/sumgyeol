@@ -92,7 +92,7 @@ export default function HeaderClient({ user }: { user: HeaderUser | null }) {
 
           <nav className="apple-nav-center" aria-label="주요">
             {NAV.map((it) => (
-              <Link key={it.href} href={it.href} className="apple-nav-link">
+              <Link key={it.href} href={it.href} className="apple-nav-link" data-label={it.label}>
                 {it.label}
               </Link>
             ))}

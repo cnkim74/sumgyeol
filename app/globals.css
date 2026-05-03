@@ -542,15 +542,36 @@ body {
 }
 
 .apple-nav-link {
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 400;
-  letter-spacing: 0.01em;
-  color: var(--color-nav-fg-mute);
-  transition: color 0.2s ease;
+  letter-spacing: 0.005em;
+  color: rgba(245, 241, 230, 0.62);
+  padding: 5px 10px;
+  border-radius: 6px;
+  transition: color 0.18s ease, background 0.18s ease, font-weight 0s;
   white-space: nowrap;
+  position: relative;
 }
-.apple-nav-link:hover { color: #fff; }
-.apple-nav-link[aria-current="page"] { color: #fff; }
+/* 호버 시 bold 치환 — 너비 고정을 위해 ::after로 공간 선점 */
+.apple-nav-link::after {
+  content: attr(data-label);
+  display: block;
+  font-weight: 600;
+  height: 0;
+  visibility: hidden;
+  overflow: hidden;
+  pointer-events: none;
+}
+.apple-nav-link:hover {
+  color: #fff;
+  background: rgba(245, 241, 230, 0.1);
+  font-weight: 600;
+}
+.apple-nav-link[aria-current="page"] {
+  color: #fff;
+  font-weight: 600;
+  background: rgba(245, 241, 230, 0.08);
+}
 
 .apple-nav-cta {
   display: none;
