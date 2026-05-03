@@ -191,3 +191,18 @@ export async function getMemorialMessages(
   });
   return result.rows.map((r) => rowToMessage(r as Record<string, unknown>));
 }
+
+export async function deleteMemorial(
+  id: number,
+  userId: number
+): Promise<{ ok: boolean } | { error: string }> {
+  const db = await getDb();
+  const exists = await db.execute({
+    sql: "SELECT id FROM memorial_pages WHERE id = ? AND user_id = ?",
+    args: [id, userId],
+  });
+  if (exists.rows.length === 0) return { error: "하늘공원을 찾을 수 없습니다." };
+  await db.execute({ sql: "DELETE FROM memorial_messages WHERE memorial_id = ?", args: [id] });
+  await db.execute({ sql: "DELETE FROM memorial_pages WHERE id = ? AND user_id = ?", args: [id, userId] });
+  return { ok: true };
+}

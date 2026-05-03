@@ -5,6 +5,7 @@ import { getMemorialsByUser } from "@/lib/memorials";
 import { getObituariesByUser } from "@/lib/obituaries";
 import { getRoomsByOwner } from "@/lib/rooms";
 import { PROMO_ELIGIBLE_ROLES, type Role } from "@/lib/roles";
+import DeleteButton from "@/components/DeleteButton";
 
 export const metadata = { title: "대시보드 — 숨결" };
 
@@ -84,17 +85,18 @@ export default async function DashboardPage() {
                       {m.status === "live" ? "공개" : "초안"}
                     </span>
                     {m.status === "live" && (
-                      <Link
-                        href={`/하늘/${m.slug}`}
-                        className="dmr-link"
-                        target="_blank"
-                      >
+                      <Link href={`/하늘/${m.slug}`} className="dmr-link" target="_blank">
                         방문 →
                       </Link>
                     )}
                     <Link href={`/dashboard/memorial/${m.id}`} className="dmr-link">
                       편집
                     </Link>
+                    <DeleteButton
+                      apiPath={`/api/memorial/${m.id}`}
+                      label="하늘공원"
+                      name={m.deceasedName}
+                    />
                   </div>
                 </div>
               ))}
@@ -141,14 +143,23 @@ export default async function DashboardPage() {
                     <span className={`notion-badge notion-badge-${o.status === "live" ? "approved" : "pending"}`}>
                       {o.status === "live" ? "공개" : "초안"}
                     </span>
-                    {o.status === "live" && (
+                    {o.status === "live" ? (
                       <Link href={`/부고/${o.slug}`} className="dmr-link" target="_blank">
                         공유 →
+                      </Link>
+                    ) : (
+                      <Link href={`/dashboard/obituary/${o.id}/preview`} className="dmr-link">
+                        미리보기
                       </Link>
                     )}
                     <Link href={`/dashboard/obituary/${o.id}`} className="dmr-link">
                       편집
                     </Link>
+                    <DeleteButton
+                      apiPath={`/api/obituary/${o.id}`}
+                      label="부고장"
+                      name={`고(故) ${o.deceasedName}`}
+                    />
                   </div>
                 </div>
               ))}

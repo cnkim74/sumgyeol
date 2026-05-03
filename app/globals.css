@@ -1767,6 +1767,73 @@ body {
 
 .dmr-link:hover { color: var(--color-ink); }
 
+.dmr-link--danger {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  font-family: inherit;
+  color: #c0392b;
+  opacity: 0.65;
+  transition: opacity 0.15s;
+}
+.dmr-link--danger:hover { opacity: 1; }
+
+/* 삭제 확인 다이얼로그 */
+.delete-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 20px;
+}
+.delete-dialog {
+  background: #fff;
+  border-radius: 12px;
+  padding: 28px 28px 24px;
+  max-width: 400px;
+  width: 100%;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+}
+.delete-dialog-title {
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--color-ink);
+  margin-bottom: 10px;
+}
+.delete-dialog-body {
+  font-size: 14px;
+  color: var(--color-ink-mute);
+  line-height: 1.6;
+  margin-bottom: 20px;
+}
+.delete-dialog-error {
+  font-size: 13px;
+  color: #c0392b;
+  margin-bottom: 12px;
+}
+.delete-dialog-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+}
+.btn-danger {
+  background: #c0392b;
+  color: #fff;
+  border: none;
+  padding: 8px 20px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.btn-danger:hover { background: #a93226; }
+.btn-danger:disabled { opacity: 0.6; cursor: not-allowed; }
+
 /* 대시보드 카드 */
 .dash-card {
   background: var(--color-paper);
@@ -2339,6 +2406,458 @@ body {
   color: var(--color-bg-deep);
   letter-spacing: 0.04em;
 }
+
+/* ═══════════════════════════════════════════════════════════
+   부고장 템플릿 — modern
+   ═══════════════════════════════════════════════════════════ */
+
+.obit-root[data-template="modern"] {
+  background: #ffffff;
+  font-family: "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
+}
+.obit-root[data-template="modern"] .obit-header {
+  background: #ffffff;
+  border-bottom: 2px solid #111111;
+  padding: 52px 24px 36px;
+}
+.obit-root[data-template="modern"] .obit-chrysanthemum {
+  width: 64px;
+  height: 40px;
+  color: #111;
+}
+.obit-root[data-template="modern"] .obit-kicker {
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.4em;
+  color: #111;
+}
+.obit-root[data-template="modern"] .obit-name {
+  font-weight: 900;
+}
+.obit-root[data-template="modern"] .obit-died-line {
+  color: #111;
+  font-weight: 500;
+}
+.obit-root[data-template="modern"] .obit-years {
+  color: #666;
+  letter-spacing: 0.15em;
+}
+.obit-root[data-template="modern"] .obit-section-title {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.22em;
+  color: #111;
+  border-bottom: 1.5px solid #111;
+  padding-bottom: 10px;
+  margin-bottom: 16px;
+}
+.obit-root[data-template="modern"] .obit-info-row {
+  border-bottom: 1px solid #e8e8e8;
+}
+.obit-root[data-template="modern"] .obit-info-row dt {
+  background: #f5f5f5;
+  color: #444;
+  font-weight: 600;
+  font-size: 12px;
+}
+.obit-root[data-template="modern"] .obit-info-row dd {
+  color: #111;
+}
+.obit-root[data-template="modern"] .obit-info-row--accent dd {
+  color: #111;
+  font-weight: 700;
+}
+.obit-root[data-template="modern"] .obit-divider span {
+  background: #111;
+  opacity: 0.12;
+}
+.obit-root[data-template="modern"] .obit-divider-icon {
+  color: #111;
+  opacity: 0.2;
+}
+.obit-root[data-template="modern"] .obit-mourner-relation {
+  background: #f0f0f0;
+  color: #444;
+}
+.obit-root[data-template="modern"] .obit-bank {
+  background: #f5f5f5;
+  border-left: 3px solid #111;
+  border-radius: 0 4px 4px 0;
+}
+.obit-root[data-template="modern"] .obit-map-badge {
+  background: #111;
+  color: #fff;
+}
+.obit-root[data-template="modern"] .obit-memorial-link {
+  border-color: #e0e0e0;
+  background: #f8f8f8;
+}
+.obit-root[data-template="modern"] .obit-share-btn {
+  border-color: #ddd;
+}
+.obit-root[data-template="modern"] .obit-footer {
+  border-top: 1px solid #e0e0e0;
+  color: #888;
+}
+.obit-root[data-template="modern"] .obit-footer-brand {
+  color: #bbb;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   부고장 템플릿 — nature (자연)
+   ═══════════════════════════════════════════════════════════ */
+
+.obit-root[data-template="nature"] {
+  background: #edf5ed;
+}
+.obit-root[data-template="nature"] .obit-header {
+  background: linear-gradient(180deg, #cce3cc 0%, #edf5ed 100%);
+  border-bottom-color: #8fbf8f;
+  padding: 52px 24px 36px;
+}
+.obit-root[data-template="nature"] .obit-chrysanthemum {
+  color: #3d7a55;
+}
+.obit-root[data-template="nature"] .obit-kicker {
+  color: #2a5c2a;
+  font-weight: 600;
+  letter-spacing: 0.3em;
+}
+.obit-root[data-template="nature"] .obit-name {
+  color: #1a3d1a;
+}
+.obit-root[data-template="nature"] .obit-died-line {
+  color: #2a5c2a;
+}
+.obit-root[data-template="nature"] .obit-years {
+  color: #5a8a5a;
+}
+.obit-root[data-template="nature"] .obit-section {
+  background: rgba(255,255,255,0.55);
+  border-radius: 10px;
+  margin-left: 16px;
+  margin-right: 16px;
+  padding-left: 20px;
+  padding-right: 20px;
+}
+.obit-root[data-template="nature"] .obit-section-title {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  color: #2a5c2a;
+  border-bottom: 1.5px solid #8fbf8f;
+  padding-bottom: 8px;
+}
+.obit-root[data-template="nature"] .obit-info-row {
+  border-bottom: 1px solid #b8d4b8;
+}
+.obit-root[data-template="nature"] .obit-info-row dt {
+  background: rgba(143,191,143,0.25);
+  color: #2a5c2a;
+  font-weight: 600;
+}
+.obit-root[data-template="nature"] .obit-info-row dd {
+  color: #1a3d1a;
+}
+.obit-root[data-template="nature"] .obit-info-row--accent dd {
+  color: #2a5c2a;
+  font-weight: 700;
+}
+.obit-root[data-template="nature"] .obit-divider span {
+  background: #8fbf8f;
+  opacity: 0.6;
+}
+.obit-root[data-template="nature"] .obit-divider-icon {
+  color: #3d7a55;
+  opacity: 0.55;
+}
+.obit-root[data-template="nature"] .obit-mourner-relation {
+  background: rgba(143,191,143,0.3);
+  color: #2a5c2a;
+}
+.obit-root[data-template="nature"] .obit-bank {
+  background: rgba(255,255,255,0.7);
+  border-left: 3px solid #3d7a55;
+  border-radius: 0 6px 6px 0;
+}
+.obit-root[data-template="nature"] .obit-bank-name {
+  color: #2a5c2a;
+  font-weight: 700;
+}
+.obit-root[data-template="nature"] .obit-bank-account {
+  color: #1a3d1a;
+}
+.obit-root[data-template="nature"] .obit-map-badge {
+  background: #3d7a55;
+  color: #fff;
+}
+.obit-root[data-template="nature"] .obit-memorial-link {
+  border-color: #8fbf8f;
+  background: rgba(255,255,255,0.6);
+}
+.obit-root[data-template="nature"] .obit-share-btn {
+  border-color: #8fbf8f;
+  color: #2a5c2a;
+}
+.obit-root[data-template="nature"] .obit-footer {
+  background: rgba(204,227,204,0.4);
+  border-top: 1px solid #8fbf8f;
+  color: #3d6b3d;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   부고장 템플릿 — heaven (하늘)
+   ═══════════════════════════════════════════════════════════ */
+
+.obit-root[data-template="heaven"] {
+  background: #eef2fb;
+}
+.obit-root[data-template="heaven"] .obit-header {
+  background: linear-gradient(180deg, #c8d8f4 0%, #eef2fb 100%);
+  border-bottom-color: #90a8d8;
+  padding: 52px 24px 36px;
+}
+.obit-root[data-template="heaven"] .obit-chrysanthemum {
+  color: #3a5ea8;
+}
+.obit-root[data-template="heaven"] .obit-kicker {
+  color: #2c4a8b;
+  font-weight: 600;
+  letter-spacing: 0.3em;
+}
+.obit-root[data-template="heaven"] .obit-name {
+  color: #1a2e6b;
+}
+.obit-root[data-template="heaven"] .obit-died-line {
+  color: #2c4a8b;
+}
+.obit-root[data-template="heaven"] .obit-years {
+  color: #5a78c0;
+}
+.obit-root[data-template="heaven"] .obit-section-title {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  color: #2c4a8b;
+  border-bottom: 1px solid #90a8d8;
+  padding-bottom: 8px;
+}
+.obit-root[data-template="heaven"] .obit-info-row {
+  border-bottom: 1px solid #b8c8e8;
+}
+.obit-root[data-template="heaven"] .obit-info-row dt {
+  background: rgba(200,216,244,0.4);
+  color: #2c4a8b;
+  font-weight: 600;
+}
+.obit-root[data-template="heaven"] .obit-info-row dd {
+  color: #1a2e6b;
+}
+.obit-root[data-template="heaven"] .obit-info-row--accent dd {
+  color: #2c4a8b;
+  font-weight: 700;
+}
+.obit-root[data-template="heaven"] .obit-divider span {
+  background: #90a8d8;
+  opacity: 0.55;
+}
+.obit-root[data-template="heaven"] .obit-divider-icon {
+  color: #3a5ea8;
+  opacity: 0.5;
+}
+.obit-root[data-template="heaven"] .obit-mourner-relation {
+  background: rgba(144,168,216,0.25);
+  color: #2c4a8b;
+}
+.obit-root[data-template="heaven"] .obit-bank {
+  background: rgba(255,255,255,0.6);
+  border-left: 3px solid #3a5ea8;
+  border-radius: 0 6px 6px 0;
+}
+.obit-root[data-template="heaven"] .obit-bank-name {
+  color: #2c4a8b;
+  font-weight: 700;
+}
+.obit-root[data-template="heaven"] .obit-bank-account {
+  color: #1a2e6b;
+}
+.obit-root[data-template="heaven"] .obit-map-badge {
+  background: #3a5ea8;
+  color: #fff;
+}
+.obit-root[data-template="heaven"] .obit-memorial-link {
+  border-color: #90a8d8;
+  background: rgba(255,255,255,0.55);
+}
+.obit-root[data-template="heaven"] .obit-share-btn {
+  border-color: #90a8d8;
+  color: #2c4a8b;
+}
+.obit-root[data-template="heaven"] .obit-footer {
+  background: rgba(200,216,244,0.3);
+  border-top: 1px solid #90a8d8;
+  color: #3a5ea8;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   부고장 템플릿 — warmth (온기)
+   ═══════════════════════════════════════════════════════════ */
+
+.obit-root[data-template="warmth"] {
+  background: #fdf5e3;
+}
+.obit-root[data-template="warmth"] .obit-header {
+  background: linear-gradient(180deg, #f0d898 0%, #fdf5e3 100%);
+  border-bottom-color: #c8a040;
+  padding: 52px 24px 36px;
+}
+.obit-root[data-template="warmth"] .obit-chrysanthemum {
+  color: #a06c1e;
+}
+.obit-root[data-template="warmth"] .obit-kicker {
+  color: #7a4d10;
+  font-weight: 600;
+  letter-spacing: 0.3em;
+}
+.obit-root[data-template="warmth"] .obit-name {
+  color: #5a3208;
+}
+.obit-root[data-template="warmth"] .obit-died-line {
+  color: #7a4d10;
+}
+.obit-root[data-template="warmth"] .obit-years {
+  color: #a07840;
+}
+.obit-root[data-template="warmth"] .obit-section-title {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  color: #7a4d10;
+  border-bottom: 1px solid #c8a040;
+  padding-bottom: 8px;
+}
+.obit-root[data-template="warmth"] .obit-info-row {
+  border-bottom: 1px solid #e0c070;
+}
+.obit-root[data-template="warmth"] .obit-info-row dt {
+  background: rgba(240,216,152,0.4);
+  color: #7a4d10;
+  font-weight: 600;
+}
+.obit-root[data-template="warmth"] .obit-info-row dd {
+  color: #5a3208;
+}
+.obit-root[data-template="warmth"] .obit-info-row--accent dd {
+  color: #7a4d10;
+  font-weight: 700;
+}
+.obit-root[data-template="warmth"] .obit-divider span {
+  background: #c8a040;
+  opacity: 0.45;
+}
+.obit-root[data-template="warmth"] .obit-divider-icon {
+  color: #a06c1e;
+  opacity: 0.5;
+}
+.obit-root[data-template="warmth"] .obit-mourner-relation {
+  background: rgba(200,160,64,0.2);
+  color: #7a4d10;
+}
+.obit-root[data-template="warmth"] .obit-bank {
+  background: rgba(255,255,255,0.6);
+  border-left: 3px solid #a06c1e;
+  border-radius: 0 6px 6px 0;
+}
+.obit-root[data-template="warmth"] .obit-bank-name {
+  color: #7a4d10;
+  font-weight: 700;
+}
+.obit-root[data-template="warmth"] .obit-bank-account {
+  color: #5a3208;
+}
+.obit-root[data-template="warmth"] .obit-map-badge {
+  background: #a06c1e;
+  color: #fff;
+}
+.obit-root[data-template="warmth"] .obit-memorial-link {
+  border-color: #c8a040;
+  background: rgba(255,255,255,0.55);
+}
+.obit-root[data-template="warmth"] .obit-share-btn {
+  border-color: #c8a040;
+  color: #7a4d10;
+}
+.obit-root[data-template="warmth"] .obit-footer {
+  background: rgba(240,216,152,0.3);
+  border-top: 1px solid #c8a040;
+  color: #a06c1e;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   템플릿 선택기 (ObituaryEditor)
+   ═══════════════════════════════════════════════════════════ */
+
+.obit-tpl-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+  gap: 12px;
+}
+.obit-tpl-card {
+  cursor: pointer;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 2px solid var(--color-rule);
+  transition: border-color 0.15s, box-shadow 0.15s;
+  background: #fff;
+}
+.obit-tpl-card:hover {
+  border-color: var(--color-ink-mute);
+}
+.obit-tpl-card.selected {
+  border-color: var(--color-ink);
+  box-shadow: 0 0 0 3px rgba(10,10,10,0.08);
+}
+.obit-tpl-swatch {
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  position: relative;
+}
+.obit-tpl-swatch::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, transparent 50%, rgba(0,0,0,0.06) 100%);
+}
+.obit-tpl-info {
+  padding: 10px 12px 12px;
+}
+.obit-tpl-name {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--color-ink);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.obit-tpl-desc {
+  font-size: 11px;
+  color: var(--color-ink-mute);
+  margin-top: 2px;
+  line-height: 1.4;
+}
+.obit-tpl-check {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--color-ink);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.obit-tpl-check svg { width: 8px; height: 8px; }
 
 /* ═══════════════════════════════════════════════════════════
    부고장 편집기 (ObituaryEditor)

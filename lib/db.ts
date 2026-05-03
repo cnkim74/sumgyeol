@@ -137,6 +137,7 @@ async function init(): Promise<Client> {
     "ALTER TABLE users ADD COLUMN auth_provider TEXT NOT NULL DEFAULT 'local'",
     "ALTER TABLE users ADD COLUMN provider_id TEXT",
     "ALTER TABLE users ADD COLUMN avatar_url TEXT",
+    "ALTER TABLE obituaries ADD COLUMN template TEXT NOT NULL DEFAULT 'classic'",
   ];
   for (const sql of migrations) {
     try {

@@ -26,8 +26,17 @@ type InitialData = {
   bankHolder: string | null;
   extraMessage: string | null;
   memorialSlug: string | null;
+  template: string;
   status: "draft" | "live";
 };
+
+const TEMPLATES: { id: string; name: string; subName: string; desc: string; swatch: string; emoji: string }[] = [
+  { id: "classic", name: "전통", subName: "Classic", desc: "국화 문양, 차분한 크림",   swatch: "#faf9f5", emoji: "🌸" },
+  { id: "modern",  name: "모던", subName: "Modern",  desc: "흰 배경, 굵은 타이포",     swatch: "#ffffff", emoji: "▪️" },
+  { id: "nature",  name: "자연", subName: "Nature",  desc: "세이지 그린, 잎사귀",      swatch: "#edf5ed", emoji: "🌿" },
+  { id: "heaven",  name: "하늘", subName: "Heaven",  desc: "하늘색 별, 고요한 분위기", swatch: "#eef2fb", emoji: "✨" },
+  { id: "warmth",  name: "온기", subName: "Warmth",  desc: "따뜻한 크림, 촛불",        swatch: "#fdf5e3", emoji: "🕯️" },
+];
 
 type Props = {
   userId: number;
@@ -62,6 +71,7 @@ export default function ObituaryEditor({ userId, initialData }: Props) {
   const [bankHolder, setBankHolder] = useState(initialData?.bankHolder ?? "");
   const [extraMessage, setExtraMessage] = useState(initialData?.extraMessage ?? "");
   const [memorialSlug, setMemorialSlug] = useState(initialData?.memorialSlug ?? "");
+  const [template, setTemplate] = useState(initialData?.template ?? "classic");
   const [status, setStatus] = useState<"draft" | "live">(initialData?.status ?? "draft");
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
@@ -111,6 +121,7 @@ export default function ObituaryEditor({ userId, initialData }: Props) {
       bankHolder: bankHolder || null,
       extraMessage: extraMessage || null,
       memorialSlug: memorialSlug || null,
+      template,
       status,
     };
 
@@ -137,6 +148,43 @@ export default function ObituaryEditor({ userId, initialData }: Props) {
 
   return (
     <form className="obit-editor-form" onSubmit={handleSubmit}>
+
+      {/* ── 템플릿 선택 ── */}
+      <fieldset className="oe-fieldset">
+        <legend className="oe-legend">디자인 템플릿</legend>
+        <p className="oe-label-hint" style={{ marginBottom: 14 }}>
+          카카오톡·문자로 공유될 부고장의 디자인을 선택하세요.
+        </p>
+        <div className="obit-tpl-grid">
+          {TEMPLATES.map((t) => (
+            <button
+              key={t.id}
+              type="button"
+              className={`obit-tpl-card${template === t.id ? " selected" : ""}`}
+              onClick={() => setTemplate(t.id)}
+            >
+              <div className="obit-tpl-swatch" style={{ background: t.swatch }}>
+                <span style={{ fontSize: 28, zIndex: 1, position: "relative" }}>
+                  {t.emoji}
+                </span>
+              </div>
+              <div className="obit-tpl-info">
+                <p className="obit-tpl-name">
+                  {template === t.id && (
+                    <span className="obit-tpl-check">
+                      <svg viewBox="0 0 8 8" fill="none">
+                        <path d="M1.5 4L3 5.5L6.5 2" stroke="white" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/>
+                      </svg>
+                    </span>
+                  )}
+                  {t.name}
+                </p>
+                <p className="obit-tpl-desc">{t.desc}</p>
+              </div>
+            </button>
+          ))}
+        </div>
+      </fieldset>
 
       {/* ── 고인 정보 ── */}
       <fieldset className="oe-fieldset">

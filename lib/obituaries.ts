@@ -29,6 +29,7 @@ export type Obituary = {
   bankHolder: string | null;
   extraMessage: string | null;
   memorialSlug: string | null;
+  template: string;
   status: "draft" | "live";
   createdAt: string;
   updatedAt: string;
@@ -57,6 +58,7 @@ export type ObituaryInput = {
   bankHolder?: string;
   extraMessage?: string;
   memorialSlug?: string;
+  template?: string;
   status?: "draft" | "live";
 };
 
@@ -90,6 +92,7 @@ function rowToObituary(row: Record<string, unknown>): Obituary {
     bankHolder: (row.bank_holder as string | null) ?? null,
     extraMessage: (row.extra_message as string | null) ?? null,
     memorialSlug: (row.memorial_slug as string | null) ?? null,
+    template: (row.template as string) ?? "classic",
     status: (row.status as "draft" | "live") ?? "draft",
     createdAt: row.created_at as string,
     updatedAt: row.updated_at as string,
@@ -125,8 +128,8 @@ export async function createObituary(
             (user_id, slug, deceased_name, deceased_title, born_date, died_date, died_time,
              profile_image, funeral_home, funeral_address, funeral_room, funeral_date,
              ceremony_date, burial_place, chief_mourners, contact_name, contact_phone,
-             bank_name, bank_account, bank_holder, extra_message, memorial_slug, status)
-          VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
+             bank_name, bank_account, bank_holder, extra_message, memorial_slug, template, status)
+          VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
           RETURNING *`,
     args: [
       input.userId,
@@ -151,6 +154,7 @@ export async function createObituary(
       input.bankHolder?.trim() || null,
       input.extraMessage?.trim() || null,
       input.memorialSlug?.trim() || null,
+      input.template ?? "classic",
       input.status ?? "draft",
     ],
   });
@@ -189,6 +193,7 @@ export async function updateObituary(
             bank_holder     = COALESCE(?, bank_holder),
             extra_message   = COALESCE(?, extra_message),
             memorial_slug   = COALESCE(?, memorial_slug),
+            template        = COALESCE(?, template),
             status          = COALESCE(?, status),
             updated_at      = datetime('now')
           WHERE id = ? AND user_id = ?`,
@@ -213,6 +218,7 @@ export async function updateObituary(
       patch.bankHolder?.trim() || null,
       patch.extraMessage?.trim() || null,
       patch.memorialSlug?.trim() || null,
+      patch.template || null,
       patch.status || null,
       id,
       userId,
@@ -255,4 +261,18 @@ export async function listAllObituaries(): Promise<Obituary[]> {
     "SELECT * FROM obituaries ORDER BY created_at DESC"
   );
   return result.rows.map((r) => rowToObituary(r as Record<string, unknown>));
+}
+
+export async function deleteObituary(
+  id: number,
+  userId: number
+): Promise<{ ok: boolean } | { error: string }> {
+  const db = await getDb();
+  const exists = await db.execute({
+    sql: "SELECT id FROM obituaries WHERE id = ? AND user_id = ?",
+    args: [id, userId],
+  });
+  if (exists.rows.length === 0) return { error: "부고장을 찾을 수 없습니다." };
+  await db.execute({ sql: "DELETE FROM obituaries WHERE id = ? AND user_id = ?", args: [id, userId] });
+  return { ok: true };
 }
