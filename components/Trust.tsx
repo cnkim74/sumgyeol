@@ -1,38 +1,27 @@
-const promises = [
-  {
-    title: "한국 데이터센터 보관",
-    body: "본인·가족 동의 없이 외부에 노출되지 않습니다.",
-  },
-  {
-    title: "종교·예법 강요 없음",
-    body: "양식은 직접 선택합니다. 어떤 형태의 작별이든 존중합니다.",
-  },
-  {
-    title: "장례 영업과 분리 운영",
-    body: "상조·장례식장과 정보를 공유하지 않습니다. 가입 후 영업 전화가 가지 않습니다.",
-  },
+const items = [
+  { kicker: "보관", text: "한 번 만든 페이지는 평생 보관됩니다." },
+  { kicker: "잠금", text: "그날 전까지는 본인만 볼 수 있어요." },
+  { kicker: "전달", text: "약속한 사람에게, 약속한 날에." },
+  { kicker: "해지", text: "마음이 바뀌면 모두 지울 수 있습니다." },
 ];
 
 export default function Trust() {
   return (
-    <section className="section-tight">
+    <section style={{ padding: "120px 0", borderTop: "1px solid var(--rule)" }}>
       <div className="container">
-        <div className="max-w-2xl mb-12">
-          <p className="kicker mb-4">잘 지킬 건 지킵니다</p>
-          <h2 className="display-md">
-            모던하지만, 무게는 알고 있습니다.
-          </h2>
+        <div style={{ marginBottom: 56 }}>
+          <div className="kicker" style={{ marginBottom: 24 }}>약속</div>
+          <h2 className="t-h2 serif" style={{ maxWidth: 700 }}>마음을 맡기는 일이니까요.</h2>
         </div>
-
-        <div className="grid gap-x-10 gap-y-8 md:grid-cols-3">
-          {promises.map((p) => (
-            <div key={p.title}>
-              <h3 className="font-serif text-[1.2rem] font-medium text-[var(--color-ink)] mb-2">
-                {p.title}
-              </h3>
-              <p className="font-sans text-[15px] leading-[1.7] text-[var(--color-ink-soft)]">
-                {p.body}
-              </p>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", borderTop: "1px solid var(--rule)" }}>
+          {items.map((it, i) => (
+            <div key={i} style={{
+              padding: "32px 28px 32px 0",
+              borderRight: i < items.length - 1 ? "1px solid var(--rule)" : "none",
+              paddingLeft: i > 0 ? 28 : 0,
+            }}>
+              <div className="kicker kicker-accent" style={{ marginBottom: 18 }}>{it.kicker}</div>
+              <p className="serif" style={{ fontSize: 17, lineHeight: 1.5, color: "var(--ink)" }}>{it.text}</p>
             </div>
           ))}
         </div>
