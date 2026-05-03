@@ -72,6 +72,7 @@ export default async function EditObituaryPage({
             extraMessage: obit.extraMessage,
             memorialSlug: obit.memorialSlug,
             template: obit.template,
+            objet: obit.objet,
             status: obit.status,
           }}
         />

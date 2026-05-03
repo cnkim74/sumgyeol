@@ -30,6 +30,7 @@ export type Obituary = {
   extraMessage: string | null;
   memorialSlug: string | null;
   template: string;
+  objet: string;
   status: "draft" | "live";
   createdAt: string;
   updatedAt: string;
@@ -59,6 +60,7 @@ export type ObituaryInput = {
   extraMessage?: string;
   memorialSlug?: string;
   template?: string;
+  objet?: string;
   status?: "draft" | "live";
 };
 
@@ -93,6 +95,7 @@ function rowToObituary(row: Record<string, unknown>): Obituary {
     extraMessage: (row.extra_message as string | null) ?? null,
     memorialSlug: (row.memorial_slug as string | null) ?? null,
     template: (row.template as string) ?? "classic",
+    objet: (row.objet as string) ?? "chrysanthemum",
     status: (row.status as "draft" | "live") ?? "draft",
     createdAt: row.created_at as string,
     updatedAt: row.updated_at as string,
@@ -128,8 +131,8 @@ export async function createObituary(
             (user_id, slug, deceased_name, deceased_title, born_date, died_date, died_time,
              profile_image, funeral_home, funeral_address, funeral_room, funeral_date,
              ceremony_date, burial_place, chief_mourners, contact_name, contact_phone,
-             bank_name, bank_account, bank_holder, extra_message, memorial_slug, template, status)
-          VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
+             bank_name, bank_account, bank_holder, extra_message, memorial_slug, template, objet, status)
+          VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
           RETURNING *`,
     args: [
       input.userId,
@@ -155,6 +158,7 @@ export async function createObituary(
       input.extraMessage?.trim() || null,
       input.memorialSlug?.trim() || null,
       input.template ?? "classic",
+      input.objet ?? "chrysanthemum",
       input.status ?? "draft",
     ],
   });
@@ -194,6 +198,7 @@ export async function updateObituary(
             extra_message   = COALESCE(?, extra_message),
             memorial_slug   = COALESCE(?, memorial_slug),
             template        = COALESCE(?, template),
+            objet           = COALESCE(?, objet),
             status          = COALESCE(?, status),
             updated_at      = datetime('now')
           WHERE id = ? AND user_id = ?`,
@@ -219,6 +224,7 @@ export async function updateObituary(
       patch.extraMessage?.trim() || null,
       patch.memorialSlug?.trim() || null,
       patch.template || null,
+      patch.objet || null,
       patch.status || null,
       id,
       userId,

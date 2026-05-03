@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import type { ChiefMourner } from "@/lib/obituaries";
+import { ObjetPicker, type ObjetId } from "./ObituaryObjets";
 
 type InitialData = {
   id: number;
@@ -27,6 +28,7 @@ type InitialData = {
   extraMessage: string | null;
   memorialSlug: string | null;
   template: string;
+  objet: string;
   status: "draft" | "live";
 };
 
@@ -72,6 +74,7 @@ export default function ObituaryEditor({ userId, initialData }: Props) {
   const [extraMessage, setExtraMessage] = useState(initialData?.extraMessage ?? "");
   const [memorialSlug, setMemorialSlug] = useState(initialData?.memorialSlug ?? "");
   const [template, setTemplate] = useState(initialData?.template ?? "classic");
+  const [objet, setObjet] = useState<ObjetId>((initialData?.objet ?? "chrysanthemum") as ObjetId);
   const [status, setStatus] = useState<"draft" | "live">(initialData?.status ?? "draft");
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
@@ -122,6 +125,7 @@ export default function ObituaryEditor({ userId, initialData }: Props) {
       extraMessage: extraMessage || null,
       memorialSlug: memorialSlug || null,
       template,
+      objet,
       status,
     };
 
@@ -184,6 +188,15 @@ export default function ObituaryEditor({ userId, initialData }: Props) {
             </button>
           ))}
         </div>
+      </fieldset>
+
+      {/* ── 오브제 선택 ── */}
+      <fieldset className="oe-fieldset">
+        <legend className="oe-legend">장식 오브제</legend>
+        <p className="oe-label-hint" style={{ marginBottom: 14 }}>
+          부고장 헤더와 구분선에 표시될 장식 아이콘을 선택하세요.
+        </p>
+        <ObjetPicker value={objet} onChange={setObjet} />
       </fieldset>
 
       {/* ── 고인 정보 ── */}

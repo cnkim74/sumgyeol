@@ -2041,44 +2041,101 @@ body {
    ═══════════════════════════════════════════════════════════ */
 
 /* 부고 페이지는 헤더/푸터 없이 독립적인 느낌 — 하지만 전역 레이아웃 안에서 */
-.obit-root {
-  max-width: 540px;
-  margin: 0 auto;
-  padding: 0 0 80px;
-  background: var(--color-paper);
-  min-height: calc(100dvh - 48px);
+/* ── 오브제 피커 (에디터) ── */
+.objet-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(88px, 1fr));
+  gap: 10px;
 }
 
-/* 상단 헤더 — 국화 + 부고 타이틀 */
+.objet-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 12px 8px 10px;
+  border-radius: 10px;
+  border: 2px solid var(--color-rule);
+  background: var(--color-paper);
+  cursor: pointer;
+  transition: border-color 0.15s, box-shadow 0.15s, background 0.15s;
+  color: var(--color-ink-mute);
+}
+
+.objet-card:hover {
+  border-color: var(--color-ink-mute);
+  background: var(--color-bg-soft);
+}
+
+.objet-card.selected {
+  border-color: var(--color-ink);
+  background: var(--color-bg);
+  box-shadow: 0 0 0 3px rgba(10,10,10,0.08);
+  color: var(--color-ink);
+}
+
+.objet-card-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.objet-card-name {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: inherit;
+}
+
+/* ── 부고장 뷰 ── */
+.obit-root {
+  max-width: 580px;
+  margin: 0 auto;
+  padding: 0 0 80px;
+  background: var(--obit-bg, #faf9f5);
+  min-height: calc(100dvh - 72px);
+}
+
+.obit-preview-banner {
+  background: #fff3cd;
+  color: #856404;
+  font-size: 13px;
+  padding: 10px 20px;
+  text-align: center;
+  border-bottom: 1px solid #ffd666;
+}
+
+/* 상단 헤더 */
 .obit-header {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 48px 24px 24px;
-  gap: 16px;
-  border-bottom: 1px solid var(--color-rule);
+  padding: 52px 24px 28px;
+  gap: 18px;
+  background: var(--obit-header-bg, linear-gradient(160deg,#f5f0e8 0%,#faf9f5 100%));
+  border-bottom: 1px solid var(--obit-rule, #e0dbd0);
 }
 
-.obit-chrysanthemum {
-  width: 60px;
-  height: 60px;
-  color: var(--color-ink-mute);
-  opacity: 0.6;
+.obit-objet-wrap {
+  width: 72px;
+  height: 72px;
+  color: var(--obit-accent, #5a6045);
+  opacity: 0.82;
 }
 
-.obit-chrysanthemum svg { width: 100%; height: 100%; }
+.obit-objet-wrap svg { width: 100%; height: 100%; display: block; }
 
 .obit-kicker {
-  font-size: 13px;
-  font-weight: 600;
-  letter-spacing: 0.5em;
-  color: var(--color-ink-mute);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.55em;
+  color: var(--obit-ink-mute, #7a7060);
   text-transform: uppercase;
 }
 
 /* 고인 정보 */
 .obit-deceased {
-  padding: 36px 28px 28px;
+  padding: 40px 28px 32px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -2105,23 +2162,24 @@ body {
 }
 
 .obit-name {
-  font-size: 24px;
-  font-weight: 700;
-  letter-spacing: -0.02em;
-  color: var(--color-ink);
+  font-size: 26px;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: var(--obit-ink, #2a2820);
 }
 
 .obit-died-line {
   font-size: 17px;
   font-weight: 500;
-  color: var(--color-ink);
+  color: var(--obit-ink, #2a2820);
   letter-spacing: -0.01em;
+  line-height: 1.6;
 }
 
 .obit-years {
   font-size: 13px;
-  color: var(--color-ink-mute);
-  letter-spacing: 0.1em;
+  color: var(--obit-ink-mute, #7a7060);
+  letter-spacing: 0.12em;
   margin-top: 4px;
 }
 
@@ -2137,15 +2195,14 @@ body {
 .obit-divider span {
   flex: 1;
   height: 1px;
-  background: var(--color-rule);
+  background: var(--obit-rule, #e0dbd0);
 }
 
-.obit-divider--light span { background: var(--color-bg-soft); }
-
 .obit-divider-icon {
-  width: 18px;
-  height: 18px;
-  color: var(--color-ink-mute);
+  width: 20px;
+  height: 20px;
+  color: var(--obit-accent, #5a6045);
+  opacity: 0.45;
   flex-shrink: 0;
 }
 
@@ -2163,12 +2220,14 @@ body {
 }
 
 .obit-section-title {
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.2em;
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.22em;
   text-transform: uppercase;
-  color: var(--color-ink-mute);
+  color: var(--obit-accent, #5a6045);
   margin-bottom: 14px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--obit-rule, #e0dbd0);
 }
 
 /* 정보 그리드 (dt/dd) */
@@ -2449,26 +2508,44 @@ body {
   border-color: #a7f3d0 !important;
 }
 
+/* 공유 패널 힌트 */
+.obit-share-hint {
+  font-size: 11px;
+  color: var(--color-ink-mute);
+  margin-top: 10px;
+  letter-spacing: 0.02em;
+  line-height: 1.5;
+}
+
 /* 하단 푸터 */
 .obit-footer {
-  padding: 32px 28px;
+  padding: 32px 28px 40px;
   text-align: center;
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  align-items: center;
+  gap: 8px;
+  border-top: 1px solid var(--obit-rule, #e0dbd0);
 }
 
-.obit-footer p:first-child {
+.obit-footer-objet {
+  color: var(--obit-accent, #5a6045);
+  opacity: 0.35;
+  margin-bottom: 2px;
+}
+
+.obit-footer-pray {
   font-size: 15px;
   font-weight: 500;
-  color: var(--color-ink-mute);
+  color: var(--obit-ink-mute, #7a7060);
   letter-spacing: 0.06em;
 }
 
 .obit-footer-brand {
-  font-size: 12px;
-  color: var(--color-bg-deep);
-  letter-spacing: 0.04em;
+  font-size: 11px;
+  color: var(--obit-ink-mute, #7a7060);
+  opacity: 0.5;
+  letter-spacing: 0.1em;
 }
 
 /* ═══════════════════════════════════════════════════════════
