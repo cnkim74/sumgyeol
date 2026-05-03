@@ -71,11 +71,9 @@ const HERO_SLIDES: Slide[] = [
 
 const INTERVAL_MS = 6500;
 
-// keep prop signature compatible with existing app/page.tsx call sites
 export type SliderItem = { id?: number; imagePath?: string; alt?: string };
 
-export default function HeroSlider({ slides: _slides }: { slides?: SliderItem[] } = {}) {
-  void _slides; // currently unused — moods drive the visual
+export default function HeroSlider({ slides = [] }: { slides?: SliderItem[] } = {}) {
   const [idx, setIdx] = useState(0);
   const [paused, setPaused] = useState(false);
   const total = HERO_SLIDES.length;
@@ -107,20 +105,38 @@ export default function HeroSlider({ slides: _slides }: { slides?: SliderItem[] 
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
     >
-      {HERO_SLIDES.map((s, i) => (
-        <div
-          key={s.id}
-          style={{
-            position: "absolute",
-            inset: 0,
-            opacity: i === idx ? 1 : 0,
-            transition: "opacity 1.2s ease",
-            pointerEvents: i === idx ? "auto" : "none",
-          }}
-        >
-          <HeroMood mood={s.mood} />
-        </div>
-      ))}
+      {HERO_SLIDES.map((s, i) => {
+        const dbImage = slides[i]?.imagePath;
+        return (
+          <div
+            key={s.id}
+            style={{
+              position: "absolute",
+              inset: 0,
+              opacity: i === idx ? 1 : 0,
+              transition: "opacity 1.2s ease",
+              pointerEvents: i === idx ? "auto" : "none",
+            }}
+          >
+            {dbImage ? (
+              <>
+                <div style={{
+                  position: "absolute", inset: 0,
+                  backgroundImage: `url(${dbImage})`,
+                  backgroundSize: "cover",
+                  backgroundPosition: "center",
+                }} />
+                <div style={{
+                  position: "absolute", inset: 0,
+                  background: "linear-gradient(to right, rgba(10,10,10,0.72) 0%, rgba(10,10,10,0.35) 50%, rgba(10,10,10,0.15) 100%)",
+                }} />
+              </>
+            ) : (
+              <HeroMood mood={s.mood} />
+            )}
+          </div>
+        );
+      })}
 
       <div style={{
         position: "absolute", inset: 0,
@@ -137,7 +153,7 @@ export default function HeroSlider({ slides: _slides }: { slides?: SliderItem[] 
           <div className="kicker fade-up" style={{ marginBottom: 28, color: slide.mood === "cherry" ? "#d4a5a5" : "var(--ink-3)" }}>
             {slide.kicker}
           </div>
-          <h1 className="t-display serif fade-up d1">
+          <h1 className="t-display fade-up d1">
             {slide.title.map((line, i) => (
               <Fragment key={i}>
                 {i === slide.titleItalic ? (

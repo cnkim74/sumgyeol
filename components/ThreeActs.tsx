@@ -14,7 +14,7 @@ export default function ThreeActs() {
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", alignItems: "end", gap: 40, marginBottom: 80 }}>
           <div>
             <div className="kicker" style={{ marginBottom: 24 }}>서비스 — 세 막</div>
-            <h2 className="t-h1 serif">모음 · 보냄 · 머무름.</h2>
+            <h2 className="t-h1">모음 · 보냄 · 머무름.</h2>
           </div>
           <div className="t-body" style={{ paddingBottom: 8 }}>
             한 사람의 시간은 흐름입니다. 살아있는 동안 차곡차곡 쌓아두고, 그날이 오면 약속한 가족에게 보내고, 이후에도 일상 가까이에 머무르도록 — 세 막으로 설계했습니다.
@@ -34,7 +34,7 @@ export default function ThreeActs() {
                 <span className="kicker kicker-accent">{act.kicker}</span>
                 <span className="t-meta">{act.when}</span>
               </div>
-              <h3 className="t-h2 serif" style={{ marginBottom: 28 }}>{act.title}</h3>
+              <h3 className="t-h2" style={{ marginBottom: 28 }}>{act.title}</h3>
               <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: 14, marginTop: "auto" }}>
                 {act.items.map((item, j) => (
                   <li key={j} style={{ display: "flex", gap: 12, alignItems: "flex-start", color: "var(--ink-2)", fontSize: 15, lineHeight: 1.6 }}>

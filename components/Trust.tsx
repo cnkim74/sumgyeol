@@ -11,7 +11,7 @@ export default function Trust() {
       <div className="container">
         <div style={{ marginBottom: 56 }}>
           <div className="kicker" style={{ marginBottom: 24 }}>약속</div>
-          <h2 className="t-h2 serif" style={{ maxWidth: 700 }}>마음을 맡기는 일이니까요.</h2>
+          <h2 className="t-h2" style={{ maxWidth: 700 }}>마음을 맡기는 일이니까요.</h2>
         </div>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", borderTop: "1px solid var(--rule)" }}>
           {items.map((it, i) => (
