@@ -3138,9 +3138,10 @@ body {
 
 .oe-actions {
   display: flex;
-  gap: 10px;
+  gap: 12px;
   flex-wrap: wrap;
-  padding-top: 8px;
+  padding-top: 12px;
+  padding-bottom: 48px;
 }
 
 /* ─── OAuth buttons ─────────────────────────────────────────── */
