@@ -228,12 +228,13 @@ export default async function DashboardPage() {
             desc="사진·영상·글을 생전에 모아 둡니다."
             badge="준비 중"
           />
-          <DashCard
-            icon="📨"
-            title="부고 알림"
-            desc="카카오톡·문자로 부고를 발송합니다."
-            badge="준비 중"
-          />
+          <Link href="/dashboard/contacts" className="dash-card hoverable">
+            <span className="dash-card-icon">📋</span>
+            <div>
+              <p className="dash-card-title">연락처 관리</p>
+              <p className="dash-card-desc">부고를 보낼 연락처를 그룹별로 보관합니다.</p>
+            </div>
+          </Link>
           {PROMO_ELIGIBLE_ROLES.includes(role) && (
             <Link href="/promo" className="dash-card hoverable">
               <span className="dash-card-icon">📣</span>

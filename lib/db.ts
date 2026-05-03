@@ -128,6 +128,19 @@ async function init(): Promise<Client> {
         FOREIGN KEY (room_id) REFERENCES memorial_rooms(id) ON DELETE CASCADE,
         FOREIGN KEY (author_id) REFERENCES users(id) ON DELETE SET NULL
       )`,
+      `CREATE TABLE IF NOT EXISTS contacts (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        user_id INTEGER NOT NULL,
+        name TEXT NOT NULL,
+        phone TEXT,
+        email TEXT,
+        relation TEXT,
+        group_name TEXT DEFAULT '일반',
+        memo TEXT,
+        created_at TEXT NOT NULL DEFAULT (datetime('now')),
+        updated_at TEXT NOT NULL DEFAULT (datetime('now')),
+        FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+      )`,
     ],
     "write"
   );

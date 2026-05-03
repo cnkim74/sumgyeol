@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import type { ChiefMourner } from "@/lib/obituaries";
 import { ObjetPicker, type ObjetId } from "./ObituaryObjets";
@@ -77,7 +77,10 @@ export default function ObituaryEditor({ userId, initialData }: Props) {
   const [objet, setObjet] = useState<ObjetId>((initialData?.objet ?? "chrysanthemum") as ObjetId);
   const [status, setStatus] = useState<"draft" | "live">(initialData?.status ?? "draft");
   const [submitting, setSubmitting] = useState(false);
+  const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
+  const [lastSaved, setLastSaved] = useState<Date | null>(null);
+  const savedIdRef = useRef<number | null>(initialData?.id ?? null);
 
   function autoSlug(name: string) {
     return name.trim().toLowerCase().replace(/\s+/g, "-").replace(/[^a-z0-9가-힣-]/g, "");
@@ -97,12 +100,8 @@ export default function ObituaryEditor({ userId, initialData }: Props) {
     );
   }
 
-  async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault();
-    setSubmitting(true);
-    setError("");
-
-    const body = {
+  function buildBody(targetStatus: "draft" | "live") {
+    return {
       userId,
       slug,
       deceasedName,
@@ -126,28 +125,75 @@ export default function ObituaryEditor({ userId, initialData }: Props) {
       memorialSlug: memorialSlug || null,
       template,
       objet,
-      status,
+      status: targetStatus,
     };
+  }
 
-    const url = isEdit ? `/api/obituary/${initialData!.id}` : "/api/obituary";
-    const method = isEdit ? "PATCH" : "POST";
+  const saveNow = useCallback(async (targetStatus: "draft" | "live", silent = false) => {
+    if (!deceasedName.trim() || !diedDate || !funeralHome.trim()) return null;
+    if (!silent) setSaving(true);
+    setError("");
 
-    const res = await fetch(url, {
-      method,
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(body),
-    });
+    const currentId = savedIdRef.current;
+    const url = currentId ? `/api/obituary/${currentId}` : "/api/obituary";
+    const method = currentId ? "PATCH" : "POST";
 
-    const data = await res.json();
-    setSubmitting(false);
-
-    if (!res.ok) {
-      setError(data.error ?? "오류가 발생했습니다.");
-      return;
+    try {
+      const res = await fetch(url, {
+        method,
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(buildBody(targetStatus)),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        if (!silent) setError(data.error ?? "오류가 발생했습니다.");
+        return null;
+      }
+      if (data.obituary?.id) savedIdRef.current = data.obituary.id;
+      setLastSaved(new Date());
+      return data.obituary;
+    } finally {
+      if (!silent) setSaving(false);
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [deceasedName, diedDate, funeralHome, slug, deceasedTitle, bornDate, diedTime,
+      funeralAddress, funeralRoom, funeralDate, ceremonyDate, burialPlace,
+      mourners, contactName, contactPhone, bankName, bankAccount, bankHolder,
+      extraMessage, memorialSlug, template, objet]);
 
+  /* 자동저장 — 입력 멈춘 후 45초 */
+  useEffect(() => {
+    const t = setTimeout(() => { saveNow("draft", true); }, 45_000);
+    return () => clearTimeout(t);
+  }, [saveNow]);
+
+  async function handleDraft() {
+    setSaving(true);
+    await saveNow("draft");
+    setSaving(false);
+  }
+
+  async function handlePublish(e: React.FormEvent) {
+    e.preventDefault();
+    setSubmitting(true);
+    const obit = await saveNow("live");
+    setSubmitting(false);
+    if (!obit) return;
     router.push("/dashboard");
     router.refresh();
+  }
+
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    setSubmitting(true);
+    const targetStatus = status;
+    const obit = await saveNow(targetStatus);
+    setSubmitting(false);
+    if (!obit) return;
+    if (targetStatus === "live") {
+      router.push("/dashboard");
+      router.refresh();
+    }
   }
 
   return (
@@ -431,21 +477,67 @@ export default function ObituaryEditor({ userId, initialData }: Props) {
 
       {error && <p className="oe-error">{error}</p>}
 
-      <div className="oe-actions">
-        <button type="submit" className="btn btn-primary" disabled={submitting}>
-          {submitting ? "저장 중…" : isEdit ? "수정 저장" : "부고장 만들기"}
-        </button>
-        {isEdit && status === "live" && (
-          <a
-            href={`/부고/${initialData!.slug}`}
-            target="_blank"
-            className="btn btn-soft"
+      <div className="oe-actions-bar">
+        {/* 좌: 임시저장 상태 */}
+        <div className="oe-save-status">
+          {saving && <span className="oe-saving">저장 중…</span>}
+          {!saving && lastSaved && (
+            <span className="oe-saved">
+              <SavedIcon /> {fmtSaved(lastSaved)} 저장됨
+            </span>
+          )}
+          {!saving && !lastSaved && !isEdit && (
+            <span className="oe-saved-hint">작성 중 자동으로 임시저장됩니다.</span>
+          )}
+        </div>
+
+        {/* 우: 버튼 */}
+        <div className="oe-actions">
+          <button
+            type="button"
+            className="btn btn-ghost"
+            onClick={handleDraft}
+            disabled={saving || submitting}
           >
-            공개 페이지 확인 →
+            {saving ? "저장 중…" : "임시저장"}
+          </button>
+          <button
+            type="submit"
+            className="btn btn-primary"
+            disabled={submitting || saving}
+            onClick={handlePublish}
+          >
+            {submitting ? "발행 중…" : isEdit && status === "live" ? "수정 저장" : "발행하기"}
+          </button>
+        </div>
+      </div>
+
+      <div className="oe-bottom-links">
+        {(savedIdRef.current ?? (isEdit && initialData?.slug)) && (
+          <a
+            href={isEdit ? `/dashboard/obituary/${initialData!.id}/preview` : "#"}
+            className="oe-bottom-link"
+          >
+            미리보기 →
           </a>
         )}
-        <a href="/dashboard" className="btn btn-soft">취소</a>
+        <a href="/dashboard" className="oe-bottom-link">← 대시보드로</a>
       </div>
     </form>
+  );
+}
+
+function fmtSaved(d: Date) {
+  const diff = Math.floor((Date.now() - d.getTime()) / 1000);
+  if (diff < 60) return "방금";
+  if (diff < 3600) return `${Math.floor(diff / 60)}분 전`;
+  return `${Math.floor(diff / 3600)}시간 전`;
+}
+
+function SavedIcon() {
+  return (
+    <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.8" width="13" height="13" strokeLinecap="round" strokeLinejoin="round" style={{ display: "inline", verticalAlign: "middle" }} aria-hidden="true">
+      <path d="M13 5L7 11L3 7" />
+    </svg>
   );
 }
