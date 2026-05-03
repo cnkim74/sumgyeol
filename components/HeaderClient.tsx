@@ -80,9 +80,12 @@ export default function HeaderClient({ user }: { user: HeaderUser | null }) {
             onClick={() => setOpen(false)}
           >
             <span className="apple-brand-mark">
-              <Logomark size={26} />
+              <Logomark size={38} />
             </span>
-            <span className="apple-brand-text">숨결</span>
+            <span className="apple-brand-col">
+              <span className="apple-brand-text">숨결</span>
+              <span className="apple-brand-en">Sumgyeol</span>
+            </span>
             <span className="apple-brand-divider" aria-hidden="true" />
             <span className="apple-brand-slogan">기억 · 기쁨 · 천국</span>
           </Link>

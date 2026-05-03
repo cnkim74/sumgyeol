@@ -432,7 +432,7 @@ body {
   position: sticky;
   top: 0;
   z-index: 50;
-  height: 48px;
+  height: 72px;
   background: rgba(10, 10, 10, 0.92);
   backdrop-filter: saturate(180%) blur(20px);
   -webkit-backdrop-filter: saturate(180%) blur(20px);
@@ -444,10 +444,10 @@ body {
   max-width: 1180px;
   margin: 0 auto;
   height: 100%;
-  padding: 0 22px;
+  padding: 0 28px;
   display: flex;
   align-items: center;
-  gap: 18px;
+  gap: 20px;
 }
 
 .apple-brand {
@@ -456,18 +456,34 @@ body {
   gap: 0;
   color: var(--color-nav-fg);
   flex-shrink: 0;
+  text-decoration: none;
 }
 .apple-brand-mark {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  margin-right: 9px;
+  margin-right: 11px;
+}
+/* 브랜드 한글+영문 2줄 묶음 */
+.apple-brand-col {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
 }
 .apple-brand-text {
   font-family: var(--font-sans);
-  font-weight: 700;
-  font-size: 18px;
-  letter-spacing: -0.01em;
+  font-weight: 800;
+  font-size: 22px;
+  letter-spacing: -0.02em;
+  line-height: 1;
+}
+.apple-brand-en {
+  font-family: var(--font-sans);
+  font-size: 10px;
+  font-weight: 400;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: rgba(245, 241, 230, 0.40);
   line-height: 1;
 }
 .apple-brand:hover { color: #fff; }
@@ -476,9 +492,9 @@ body {
 .apple-brand-divider {
   display: inline-block;
   width: 1px;
-  height: 14px;
-  background: rgba(245, 241, 230, 0.22);
-  margin: 0 11px;
+  height: 18px;
+  background: rgba(245, 241, 230, 0.2);
+  margin: 0 14px;
   flex-shrink: 0;
 }
 
@@ -488,12 +504,12 @@ body {
   font-size: 11px;
   font-weight: 400;
   letter-spacing: 0.14em;
-  color: rgba(245, 241, 230, 0.52);
+  color: rgba(245, 241, 230, 0.46);
   white-space: nowrap;
   flex-shrink: 0;
 }
 
-@media (max-width: 640px) {
+@media (max-width: 760px) {
   .apple-brand-divider,
   .apple-brand-slogan { display: none; }
 }

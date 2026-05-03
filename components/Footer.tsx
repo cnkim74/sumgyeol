@@ -46,12 +46,15 @@ export default function Footer() {
         <div>
           <Link
             href="/"
-            style={{ display: "inline-flex", alignItems: "center", gap: 10, color: "#e9ebee", textDecoration: "none", fontFamily: "var(--sans)", fontWeight: 700, fontSize: 18 }}
+            style={{ display: "inline-flex", alignItems: "center", gap: 12, color: "#e9ebee", textDecoration: "none" }}
           >
-            <Logomark size={28} />
-            <span>숨결</span>
+            <Logomark size={36} />
+            <span style={{ display: "flex", flexDirection: "column", gap: 2 }}>
+              <span style={{ fontFamily: "var(--sans)", fontWeight: 800, fontSize: 20, letterSpacing: "-0.02em", lineHeight: 1 }}>숨결</span>
+              <span style={{ fontFamily: "var(--sans)", fontWeight: 400, fontSize: 10, letterSpacing: "0.22em", textTransform: "uppercase", color: "rgba(245,241,230,0.38)", lineHeight: 1 }}>Sumgyeol</span>
+            </span>
           </Link>
-          <p style={{ marginTop: 6, fontSize: 11, fontWeight: 400, letterSpacing: "0.14em", color: "rgba(245,241,230,0.45)" }}>
+          <p style={{ marginTop: 8, fontSize: 11, fontWeight: 400, letterSpacing: "0.14em", color: "rgba(245,241,230,0.38)" }}>
             기억 · 기쁨 · 천국
           </p>
           <p style={{ marginTop: 16, color: FG, fontSize: 14, lineHeight: 1.8, maxWidth: 300 }}>
