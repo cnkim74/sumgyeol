@@ -15,7 +15,8 @@ export async function POST(req: NextRequest) {
     }
     return NextResponse.json({ ok: true, obituary: result.obituary });
   } catch (e) {
-    console.error("[POST /api/obituary]", e);
-    return NextResponse.json({ error: "서버 오류가 발생했습니다." }, { status: 500 });
+    const msg = e instanceof Error ? e.message : String(e);
+    console.error("[POST /api/obituary]", msg);
+    return NextResponse.json({ error: `[디버그] ${msg}` }, { status: 500 });
   }
 }
