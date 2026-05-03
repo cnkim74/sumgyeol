@@ -46,13 +46,15 @@ export default function Footer() {
         <div>
           <Link
             href="/"
-            style={{ display: "inline-flex", alignItems: "center", gap: 9, color: "#e9ebee", textDecoration: "none", fontFamily: "var(--sans)", fontWeight: 700, fontSize: 17 }}
+            style={{ display: "inline-flex", alignItems: "center", gap: 10, color: "#e9ebee", textDecoration: "none", fontFamily: "var(--sans)", fontWeight: 700, fontSize: 18 }}
           >
-            <Logomark size={22} />
+            <Logomark size={28} />
             <span>숨결</span>
           </Link>
-          <p style={{ marginTop: 14, color: FG, fontSize: 14, lineHeight: 1.8, maxWidth: 300 }}>
-            잘 떠나는 법, 잘 기억되는 법.<br />
+          <p style={{ marginTop: 6, fontSize: 11, fontWeight: 400, letterSpacing: "0.14em", color: "rgba(245,241,230,0.45)" }}>
+            기억 · 기쁨 · 천국
+          </p>
+          <p style={{ marginTop: 16, color: FG, fontSize: 14, lineHeight: 1.8, maxWidth: 300 }}>
             살아있는 동안 모으고, 그날이 오면 보내고,<br />
             이후에도 일상 가까이에 머무릅니다.
           </p>

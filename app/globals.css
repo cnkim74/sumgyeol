@@ -453,7 +453,7 @@ body {
 .apple-brand {
   display: inline-flex;
   align-items: center;
-  gap: 9px;
+  gap: 0;
   color: var(--color-nav-fg);
   flex-shrink: 0;
 }
@@ -461,15 +461,42 @@ body {
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  margin-right: 9px;
 }
 .apple-brand-text {
   font-family: var(--font-sans);
-  font-weight: 600;
-  font-size: 17px;
+  font-weight: 700;
+  font-size: 18px;
   letter-spacing: -0.01em;
   line-height: 1;
 }
 .apple-brand:hover { color: #fff; }
+
+/* 슬로건 구분선 */
+.apple-brand-divider {
+  display: inline-block;
+  width: 1px;
+  height: 14px;
+  background: rgba(245, 241, 230, 0.22);
+  margin: 0 11px;
+  flex-shrink: 0;
+}
+
+/* 브랜드 슬로건 — 데스크톱만 표시 */
+.apple-brand-slogan {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 400;
+  letter-spacing: 0.14em;
+  color: rgba(245, 241, 230, 0.52);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+@media (max-width: 640px) {
+  .apple-brand-divider,
+  .apple-brand-slogan { display: none; }
+}
 
 /* 본문(흰/크림 위) 락업 — 검정 마크+텍스트 */
 .brand-lockup {
